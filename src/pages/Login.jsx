@@ -1,25 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaRegEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
+import {
+  FaRegEye,
+  FaEyeSlash,
+  FaEnvelope,
+  FaLock,
+  FaGoogle,
+} from "react-icons/fa";
 import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 import imgLogo from "../assets/img-logo-2.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+      setIsLoading(false);
+    }, 1000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
+
   return (
     <div className="flex h-screen">
       {/* <!-- Left Pane --> */}
@@ -253,101 +262,116 @@ const Login = () => {
           </svg>
         </div>
       </div>
+
       {/* <!-- Right Pane --> */}
       <div className="flex items-center justify-center w-full bg-gray-100 lg:w-1/2">
-        <div className="w-full max-w-md p-6">
-          <div className="flex flex-col justify-center item-center">
-            <img src={imgLogo} alt="img-logo" className="w-20 mb-8 ml-40" />
-            <h1 className="mb-1 text-3xl font-semibold text-center text-purple-500 font-poppins">
-              Sign In
-            </h1>
-          </div>
-          <h1 className="mb-6 text-sm font-medium text-center text-gray-400 font-poppins">
-            Join to Our Community with all time access{" "}
-          </h1>
-          <form action="#" method="POST" className="space-y-4">
-            {/* <!-- Your form elements go here --> */}
-            <div className="relative">
-              <span
-                className="absolute inset-y-0 flex items-center left-3"
-                style={{ marginTop: "1.6rem", opacity: "30%" }}
-              >
-                <FaEnvelope style={{ marginBottom: "0.125rem" }} />
-              </span>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 font-poppins"
-              >
-                Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-              />
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            <div className="w-full max-w-md p-6">
+              <div className="flex flex-col justify-center item-center">
+                <img src={imgLogo} alt="img-logo" className="w-20 mb-8 ml-40" />
+                <h1 className="mb-1 text-3xl font-semibold text-center text-purple-500 font-poppins">
+                  Sign In
+                </h1>
+              </div>
+              <h1 className="mb-6 text-sm font-medium text-center text-gray-400 font-poppins">
+                Join to Our Community with all time access{" "}
+              </h1>
+              <form className="space-y-4">
+                <div className="relative">
+                  <span
+                    className="absolute inset-y-0 flex items-center left-3"
+                    style={{ marginTop: "1.6rem", opacity: "30%" }}
+                  >
+                    <FaEnvelope style={{ marginBottom: "0.125rem" }} />
+                  </span>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 font-poppins"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                  />
+                </div>
+                <div className="relative">
+                  <span
+                    className="absolute inset-y-0 flex items-center left-3"
+                    style={{ marginTop: "0.6rem", opacity: "30%" }}
+                  >
+                    <FaLock style={{ marginBottom: "0.125rem" }} />
+                  </span>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700 font-poppins"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    className="w-full p-2 pl-10 mt-1 mb-4 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                  />
+                  <span
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 mt-2 cursor-pointer"
+                  >
+                    {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                  </span>
+                </div>
+                <div>
+                  <Link to="/">
+                    <button
+                      type="submit"
+                      className="w-full p-2 font-medium text-white transition-colors duration-300 bg-purple-600 rounded-xl text-md font-poppins hover:bg-purple-800 focus:outline-none focus:bg-purple-800 focus:ring-2 focus:ring-offset-2 focus:ring-purple-900"
+                    >
+                      Login
+                    </button>
+                  </Link>
+                  <div className="flex justify-center mt-4 mb-4">
+                    <p>─────</p>
+                    <p className="me-2 ms-2 font-poppins">Or</p>
+                    <p>─────</p>
+                  </div>
+                  <Link to="/dashboard">
+                    <button
+                      className="text-black w-full font-bold text-sm h-[50px] mt-2 rounded-xl bg-white border border-slate-900 hover:bg-slate-900 hover:text-white transition duration-700 ease-in-out flex items-center justify-center font-poppins"
+                      type="submit"
+                    >
+                      <FaGoogle className="mr-4" /> Sign in with Google
+                    </button>
+                  </Link>
+                </div>
+              </form>
+              <div className="mt-4 text-sm text-center text-gray-600 font-poppins">
+                <p>
+                  Don&apos;t have an account?{" "}
+                  <Link to="/sign-up">
+                    <a className="font-bold text-purple-500 hover:underline font-poppins">
+                      Sign up here
+                    </a>
+                  </Link>
+                </p>
+              </div>
             </div>
-            <div className="relative">
-              <span
-                className="absolute inset-y-0 flex items-center left-3"
-                style={{ marginTop: "0.6rem", opacity: "30%" }}
-              >
-                <FaLock style={{ marginBottom: "0.125rem" }} />
-              </span>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 font-poppins"
-              >
-                Password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                className="w-full p-2 pl-10 mt-1 mb-4 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-              />
-              <span
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 mt-2 cursor-pointer"
-              >
-                {showPassword ? <FaRegEye /> : <FaEyeSlash />}
-              </span>
-            </div>
-            <div>
-              <Link to="/">
-                <button
-                  type="submit"
-                  className="w-full p-2 font-medium text-white transition-colors duration-300 bg-purple-600 rounded-md text-md font-poppins hover:bg-purple-800 focus:outline-none focus:bg-purple-800 focus:ring-2 focus:ring-offset-2 focus:ring-purple-900"
-                >
-                  Login
-                </button>
-              </Link>
-            </div>
-            {/* <div className="flex justify-center mt-4 mb-4">
-              <p>─────</p>
-              <p className="me-2 ms-2 font-poppins">Or</p>
-              <p>─────</p>
-            </div>
-            <Link to="/dashboard">
-              <button
-                className="text-black w-full font-bold text-sm h-[50px] mt-2 rounded-xl bg-white border border-slate-900 hover:bg-slate-900 hover:text-white transition duration-700 ease-in-out flex items-center justify-center font-poppins"
-                type="submit"
-              >
-                <FaGoogle className="mr-4" /> Sign in with Google
-              </button>
-            </Link> */}
-          </form>
-          <div className="mt-4 text-sm text-center text-gray-600 font-poppins">
-            <p>
-              Don&apos;t have an account?{" "}
-              <Link to="/sign-up">
-                <a className="font-bold text-purple-500 hover:underline font-poppins">
-                  Sign up here
-                </a>
-              </Link>
-            </p>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
