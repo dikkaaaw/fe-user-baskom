@@ -1,7 +1,9 @@
+import Sidebar from "../components/Sidebar";
+
 const Dashboard = () => {
   return (
     <>
-      <p>Ini dashboard</p>
+      <Sidebar />
     </>
   );
 };
