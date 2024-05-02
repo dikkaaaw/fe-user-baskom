@@ -1,7 +1,7 @@
 const Navbar = () => {
   return (
     <>
-      <p>Ini Navbar</p>
+      <p>Ini Navbar?</p>
     </>
   );
 };
