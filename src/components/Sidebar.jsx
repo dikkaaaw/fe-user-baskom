@@ -1,3 +1,5 @@
+import Navbar from "./Navbar.jsx";
+
 function Sidebar() {
   return (
     <div className="flex h-screen bg-gray-100">
@@ -36,13 +38,15 @@ function Sidebar() {
         </nav>
         {/* Logout */}
         <div className="flex items-center justify-center py-4 bg-gray-900">
-          <a href="#" className="text-gray-300 hover:text-white">
+          <a href="/login" className="text-gray-300 hover:text-white">
             Logout
           </a>
         </div>
       </div>
       {/* Main Content */}
-      <div className="flex-1 p-4">{/* Content Here */}</div>
+      <div className="flex-1 p-4">
+        <Navbar />
+      </div>
     </div>
   );
 }
