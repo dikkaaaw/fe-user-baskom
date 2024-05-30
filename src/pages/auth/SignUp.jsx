@@ -46,7 +46,7 @@ const SignUp = () => {
           progress: undefined,
         });
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 2000);
       }
     } catch (error) {
