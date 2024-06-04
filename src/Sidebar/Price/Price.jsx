@@ -1,3 +1,4 @@
+import { PropTypes } from "prop-types";
 import Input from "../../components/Input";
 import "./Price.css";
 
@@ -42,6 +43,10 @@ const Price = ({ handleChange }) => {
       </div>
     </>
   );
+};
+
+Price.propTypes = {
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default Price;
