@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-import Navigation from "../../Navigation/Nav";
-import Products from "../../Products/Products";
-import products from "../../db/data";
-import Recommended from "../../Recommended/Recommended";
-import Sidebar from "../../Sidebar/Sidebar";
+import Navigation from "../../components/Navigation/Nav";
+import Products from "../../components/Products/Products";
+import Recommended from "../../components/Recommended/Recommended";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import Card from "../../components/Card";
+import products from "../../db/data";
 import "../../index.css";
 
 function App() {

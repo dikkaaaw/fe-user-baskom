@@ -420,7 +420,7 @@ const SignUp = () => {
               <p>
                 Have an account?{" "}
                 <Link
-                  to="/login"
+                  to="/"
                   className="font-bold text-purple-500 hover:underline font-poppins"
                 >
                   Sign in here
