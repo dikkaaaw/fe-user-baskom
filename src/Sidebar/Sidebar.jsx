@@ -10,7 +10,7 @@ const Sidebar = ({ handleChange }) => {
     <>
       <section className="sidebar">
         <div className="logo-container">
-          <Link to="/">
+          <Link to="/home">
             <img src={imgLogo} alt="logo" className="logo" />
           </Link>
         </div>
