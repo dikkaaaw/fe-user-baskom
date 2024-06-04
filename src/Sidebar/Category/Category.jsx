@@ -1,5 +1,6 @@
-import "./Category.css";
+import { PropTypes } from "prop-types";
 import Input from "../../components/Input";
+import "./Category.css";
 
 function Category({ handleChange }) {
   return (
@@ -39,5 +40,9 @@ function Category({ handleChange }) {
     </div>
   );
 }
+
+Category.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+};
 
 export default Category;
