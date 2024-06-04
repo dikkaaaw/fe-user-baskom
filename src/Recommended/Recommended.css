@@ -1,0 +1,41 @@
+.recommended-flex {
+  display: flex;
+  margin-left: 20rem;
+  
+  
+  /* Untuk ukuran layar tablet (max-width: 768px) */
+  @media (max-width: 768px) {
+    margin-left: 10rem;
+  }
+  
+  /* Untuk ukuran layar mobile (max-width: 480px) */
+  @media (max-width: 480px) {
+    margin-left: 2rem;
+    flex-direction: column;
+  }
+}
+
+.btn-filter {
+  background-color: black;
+}
+
+.recommended-title {
+  margin-left: 20rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 20px;
+
+  /* Untuk ukuran layar tablet (max-width: 768px) */
+  @media (max-width: 768px) {
+    margin-left: 10rem;
+    font-size: 18px;
+  }
+
+  /* Untuk ukuran layar mobile (max-width: 480px) */
+  @media (max-width: 480px) {
+    margin-left: 2rem;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
