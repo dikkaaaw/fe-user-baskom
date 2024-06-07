@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { AiOutlineUser } from "react-icons/ai";
 import LoginModal from "../LoginModal/LoginModal";
@@ -12,6 +12,12 @@ const Nav = ({ handleInputChange, query }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleDropdownToggle = () => {
     setDropdownOpen(!dropdownOpen);
@@ -44,14 +50,21 @@ const Nav = ({ handleInputChange, query }) => {
     setShowLogoutModal(false);
   };
 
-  const handleProfileClick = (e) => {
+  const handleProfileClick = (e, path) => {
     e.preventDefault();
     if (!isLoggedIn) {
       setShowLoginModal(true);
     } else {
-      console.log("Navigasi ke halaman profile");
+      navigate(path);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/home");
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <nav>
@@ -81,8 +94,8 @@ const Nav = ({ handleInputChange, query }) => {
               <ul className="py-1 text-sm text-gray-700">
                 <li>
                   <a
-                    onClick={handleProfileClick}
                     className="block px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    onClick={(e) => handleProfileClick(e, "/user-profile")}
                   >
                     Profile
                   </a>
@@ -90,7 +103,7 @@ const Nav = ({ handleInputChange, query }) => {
                 <li>
                   <a
                     className="block px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={handleProfileClick}
+                    onClick={(e) => handleProfileClick(e, "/manage-products")}
                   >
                     Kelola Produk
                   </a>
@@ -98,7 +111,7 @@ const Nav = ({ handleInputChange, query }) => {
                 <li>
                   <a
                     className="block px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={handleProfileClick}
+                    onClick={(e) => handleProfileClick(e, "/upgrade-account")}
                   >
                     Upgrade Akun
                   </a>
