@@ -1,13 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import PropTypes from "prop-types";
 import "./LogoutModal.css";
 
 const LogoutModal = ({ show, onClose }) => {
-  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   const onLogout = () => {
-    navigate("/login");
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    onClose();
+    window.location.reload();
   };
 
   if (!show) return null;
@@ -38,7 +46,6 @@ const LogoutModal = ({ show, onClose }) => {
 LogoutModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
 };
 
 export default LogoutModal;
