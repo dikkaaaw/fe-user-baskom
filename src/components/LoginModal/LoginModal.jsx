@@ -18,7 +18,9 @@ const LoginModal = ({ show, onClose }) => {
         <div className="alert-icon">
           <FaExclamationTriangle size={40} />
         </div>
-        <p>To continue you must login first! Proceed to Login page?</p>
+        <p>
+          To continue you must login first! <br /> Proceed to Login page?
+        </p>
         <div className="modal-buttons">
           <button className="cancel-btn" onClick={onClose}>
             Cancel
