@@ -1,0 +1,36 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal */
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 400px;
+    height: 200px;
+    z-index: 1100;
+  }
+  
+  
+  /* Modal Buttons */
+  .modal-buttons {
+    margin-top: 40px;
+  }
+  
+  .modal-buttons button {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
