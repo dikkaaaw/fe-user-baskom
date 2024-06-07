@@ -4,7 +4,15 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Login, SignUp, Dashboard, NotFound } from "./pages";
+import {
+  Login,
+  SignUp,
+  Dashboard,
+  NotFound,
+  UserProfile,
+  Product,
+  UpgradeAccount,
+} from "./pages";
 
 function App() {
   return (
@@ -14,6 +22,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/home" element={<Dashboard />} />
+        <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/manage-products" element={<Product />} />
+        <Route path="/upgrade-account" element={<UpgradeAccount />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>
