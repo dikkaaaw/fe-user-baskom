@@ -10,8 +10,8 @@ import {
   Dashboard,
   NotFound,
   UserProfile,
-  Product,
-  UpgradeAccount,
+  ProductManagement,
+  AboutUs,
 } from "./pages";
 
 function App() {
@@ -23,8 +23,8 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/home" element={<Dashboard />} />
         <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/manage-products" element={<Product />} />
-        <Route path="/upgrade-account" element={<UpgradeAccount />} />
+        <Route path="/manage-products" element={<ProductManagement />} />
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>
