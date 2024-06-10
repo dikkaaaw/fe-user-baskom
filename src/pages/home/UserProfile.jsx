@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import UpgradeAccountModal from "../../components/UpgradeAccountModal/UpgradeAccountModal";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,130 +27,179 @@ const UserProfile = () => {
     fetchData();
   }, []);
 
+  const avatarUrl = `https://ui-avatars.com/api/?background=random&size=512&name=${user?.name}`;
+
   if (!user) return null;
 
   return (
-    <div className="flex justify-center mt-10">
-      <div className="relative w-full mt-10 md:w-1/2">
-        <Link to="/home">
-          <div className="top-0 left-0 flex items-center mt-4 ml-4">
-            <FiArrowLeft className="text-gray-600" />
-            <span className="ml-2 text-gray-600">Back</span>
-          </div>
-        </Link>
-        <div className="px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
-          <div className="mb-4 text-center">
-            <img
-              src={user.avatar}
-              alt="Avatar"
-              className="w-20 h-20 mx-auto mb-4 rounded-full"
-            />
-            <h2 className="text-xl font-bold">{user.name}</h2>
-            <p className="text-gray-600">{user.email}</p>
-          </div>
-          <form>
-            <div className="mb-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="name"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                value={user.name || ""}
-                readOnly
+    <div className="min-h-screen p-8 bg-gray-100">
+      <div className="p-6 mx-auto bg-white rounded-lg shadow-lg max-w-7xl">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-semibold">User Profile</h1>
+          <button
+            onClick={() => navigate("/home")}
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+          >
+            Back to Home
+          </button>
+        </div>
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <aside className="w-full p-6 bg-gray-100 rounded-lg lg:w-1/4">
+            <ul className="space-y-4">
+              <li>
+                <a href="/user-profile" className="text-gray-600">
+                  User Profile
+                </a>
+              </li>
+              <li>
+                <a href="/manage-products" className="text-gray-600">
+                  Kelola Product
+                </a>
+              </li>
+              <li>
+                <a href="#" className="font-semibold text-red-500">
+                  Sign out
+                </a>
+              </li>
+            </ul>
+          </aside>
+          <div className="flex flex-col flex-1 gap-6 lg:flex-row">
+            <div className="flex flex-col items-center w-full lg:w-1/4">
+              <img
+                src={avatarUrl}
+                alt="Avatar"
+                className="w-32 h-32 mb-4 rounded-full"
               />
+              <h2 className="text-lg font-semibold">{user.name}</h2>
+              <p className="text-gray-600">{user.phoneNumber}</p>
             </div>
-            <div className="mb-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="email"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="text"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                value={user.email || ""}
-                readOnly
-              />
+            <div className="w-full lg:w-3/4">
+              <div className="p-6 mb-6 bg-gray-100 rounded-lg">
+                <h3 className="mb-4 text-lg font-semibold">
+                  General Information
+                </h3>
+                <form>
+                  <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="name" className="block text-gray-600">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        value={user.name}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="roles" className="block text-gray-600">
+                        Role
+                      </label>
+                      <select
+                        id="roles"
+                        name="roles"
+                        className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                      >
+                        {user.roles.map((role) => (
+                          <option key={role.id} value={role.id}>
+                            {role.name} - {role.description}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="phone-number"
+                        className="block text-gray-600"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        id="phone-number"
+                        value={user.phone_number}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label htmlFor="address" className="block text-gray-600">
+                        Address
+                      </label>
+                      <textarea
+                        id="address"
+                        rows="4"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      >
+                        {user.address}
+                      </textarea>
+                    </div>
+                  </div>
+                  <div className="relative inline-block">
+                    <button
+                      type="button"
+                      className="px-4 py-2 text-gray-600 bg-gray-300 rounded"
+                      onClick={() => setIsModalOpen(true)}
+                    >
+                      Upgrade Account
+                    </button>
+                    <div
+                      className="inline-block ml-2"
+                      onMouseEnter={() => setShowTooltip(true)}
+                      onMouseLeave={() => setShowTooltip(false)}
+                    >
+                      <span className="text-xl text-gray-500 cursor-pointer">
+                        ?
+                      </span>
+                      {showTooltip && (
+                        <div className="absolute w-64 p-2 mt-2 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-lg shadow-lg left-1/2">
+                          To upgrade your account, please go to the settings
+                          page and select the &quot;Upgrade&quot; option. Follow
+                          the instructions to complete the process.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div className="p-6 bg-gray-100 rounded-lg">
+                <h3 className="mb-4 text-lg font-semibold">Security</h3>
+                <form>
+                  <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="email" className="block text-gray-600">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        value={user.email}
+                        className="w-full p-2 border border-gray-300 rounded"
+                        disabled
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="password" className="block text-gray-600">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        value="********"
+                        className="w-full p-2 border border-gray-300 rounded"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div className="mb-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="roles"
-              >
-                Roles
-              </label>
-              <select
-                id="roles"
-                name="roles"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                disabled
-              >
-                {user.roles.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.name} - {role.description}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="address"
-              >
-                Address
-              </label>
-              <textarea
-                id="address"
-                name="address"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                value={user.address || ""}
-                readOnly
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="phone"
-              >
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="text"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                value={user.phone_number || ""}
-                readOnly
-              />
-            </div>
-            <div className="mb-6 text-center">
-              <button
-                className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Edit Profile
-              </button>
-            </div>
-          </form>
-          <div className="text-center">
-            <button
-              className="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline"
-              type="button"
-            >
-              Upgrade Account
-            </button>
           </div>
         </div>
       </div>
+      <UpgradeAccountModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
