@@ -17,8 +17,8 @@ import imgLogo from "../../assets/img-logo-2.png";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
+  const [error, setError] = useState({});
+  const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
@@ -29,15 +29,33 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
 
+  const validateForm = () => {
+    let formErrors = {};
+    if (!user.name) formErrors.name = "Name is required!";
+    if (!user.email) formErrors.email = "Email is required!";
+    else if (!/\S+@\S+\.\S+/.test(user.email))
+      formErrors.email = "Invalid email format!";
+    if (!user.password) formErrors.password = "Password is required!";
+    else if (user.password.length < 8)
+      formErrors.password = "Password must be at least 8 characters long!";
+    setError(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setUser({ ...user, [e.target.name]: e.target.value });
+    if (error) {
+      setError("");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
-      const response = await axios.post("/api/register", formData);
+      const response = await axios.post("/api/register", user);
       if (response.status === 201) {
         toast.success("Sign up successful!", {
           closeOnClick: true,
@@ -46,7 +64,7 @@ const SignUp = () => {
           progress: undefined,
         });
         setTimeout(() => {
-          navigate("/");
+          navigate("/login");
         }, 2000);
       }
     } catch (error) {
@@ -333,80 +351,94 @@ const SignUp = () => {
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
-                <span
-                  className="absolute inset-y-0 flex items-center left-3"
-                  style={{ marginTop: "1.6rem", opacity: "30%" }}
-                >
-                  <FaUserAlt style={{ marginBottom: "0.125rem" }} />
-                </span>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 font-poppins"
                 >
                   Name
                 </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={user.name}
+                    onChange={handleChange}
+                    className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                  />
+                  <span
+                    className="absolute inset-y-0 flex items-center left-3"
+                    style={{ opacity: "30%" }}
+                  >
+                    <FaUserAlt style={{ marginBottom: "0.125rem" }} />
+                  </span>
+                  {error.name && (
+                    <p className="absolute -mt-1 text-sm text-red-500">
+                      {error.name}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="relative">
-                <span
-                  className="absolute inset-y-0 flex items-center left-3"
-                  style={{ marginTop: "1.6rem", opacity: "30%" }}
-                >
-                  <FaEnvelope style={{ marginBottom: "0.125rem" }} />
-                </span>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 font-poppins"
                 >
                   Email
                 </label>
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-                />
+                <div className="relative">
+                  <span
+                    className="absolute inset-y-0 flex items-center left-3"
+                    style={{ opacity: "30%" }}
+                  >
+                    <FaEnvelope style={{ marginBottom: "0.125rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    value={user.email}
+                    onChange={handleChange}
+                    className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                  />
+                  {error.email && (
+                    <p className="-mt-1 text-sm text-red-500">{error.email}</p>
+                  )}
+                </div>
               </div>
               <div className="relative">
-                <span
-                  className="absolute inset-y-0 flex items-center left-3"
-                  style={{ marginTop: "0.6rem", opacity: "30%" }}
-                >
-                  <FaLock style={{ marginBottom: "0.125rem" }} />
-                </span>
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 font-poppins"
                 >
                   Password
                 </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full p-2 pl-10 mt-1 mb-4 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-                />
-                <span
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 mt-2 cursor-pointer"
-                >
-                  {showPassword ? <FaRegEye /> : <FaEyeSlash />}
-                </span>
+                <div className="relative">
+                  <span
+                    className="absolute inset-y-0 flex items-center mb-5 left-3"
+                    style={{ opacity: "30%" }}
+                  >
+                    <FaLock style={{ marginBottom: "0.125rem" }} />
+                  </span>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={user.password}
+                    onChange={handleChange}
+                    className="w-full p-2 pl-10 mt-1 mb-4 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                  />
+                  <span
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                  >
+                    {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                  </span>
+                  {error.password && (
+                    <p className="text-sm text-red-500">{error.password}</p>
+                  )}
+                </div>
               </div>
-              {error && (
-                <div className="text-sm text-center text-red-500">{error}</div>
-              )}
               <div>
                 <button
                   type="submit"
