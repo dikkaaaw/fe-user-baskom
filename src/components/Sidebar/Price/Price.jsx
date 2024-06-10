@@ -5,7 +5,7 @@ import "./Price.css";
 const Price = ({ handleChange }) => {
   return (
     <>
-      <div className="ml">
+      <div className="ms-4">
         <h2 className="sidebar-title price-title">Price</h2>
 
         <label className="sidebar-label-container">
