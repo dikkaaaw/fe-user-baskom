@@ -36,8 +36,23 @@ const Login = () => {
     };
   }, []);
 
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!validateEmail(email)) {
+      setError("Invalid email format");
+      return;
+    }
+    if (!password) {
+      setError("Password is required");
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await axios.post("/api/login", { email, password });
@@ -64,6 +79,20 @@ const Login = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (error) {
+      setError("");
     }
   };
 
@@ -347,7 +376,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
                     className="w-full p-2 pl-10 mt-1 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                   />
                 </div>
@@ -369,7 +398,7 @@ const Login = () => {
                     id="password"
                     name="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handlePasswordChange}
                     className="w-full p-2 pl-10 mt-1 mb-4 transition-colors duration-300 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                   />
                   <span
@@ -378,12 +407,12 @@ const Login = () => {
                   >
                     {showPassword ? <FaRegEye /> : <FaEyeSlash />}
                   </span>
+                  {error && (
+                    <div className="text-sm text-center text-red-500">
+                      {error}
+                    </div>
+                  )}
                 </div>
-                {error && (
-                  <div className="text-sm text-center text-red-500">
-                    {error}
-                  </div>
-                )}
                 <div>
                   <button
                     type="submit"
