@@ -8,17 +8,6 @@ import "./Sidebar.css";
 const Sidebar = ({ handleChange }) => {
   return (
     <>
-      {/* <section classNameName="sidebar">
-        <div classNameName="logo-container">
-          <Link to="/home">
-            <img src={imgLogo} alt="logo" classNameName="logo" />
-          </Link>
-        </div>
-        <Category handleChange={handleChange} />
-        <Price handleChange={handleChange} />
-      </section> */}
-
-      {/* <!-- Component Start --> */}
       <section className="sidebar">
         <div className="flex flex-col items-center w-full h-full overflow-hidden text-gray-700 bg-white rounded">
           <a className="flex items-center w-full px-3 mt-3" href="/home">
