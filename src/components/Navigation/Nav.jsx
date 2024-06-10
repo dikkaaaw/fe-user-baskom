@@ -78,10 +78,10 @@ const Nav = ({ handleInputChange, query }) => {
         />
       </div>
       <div className="profile-container">
-        <Link to="/faq">
-          <p className="title">FAQ</p>
+        <Link to="/home">
+          <p className="title">Home</p>
         </Link>
-        <Link to="about-us">
+        <Link to="/about-us">
           <p className="title">About Us</p>
         </Link>
         <div ref={dropdownRef} className="relative">
@@ -98,22 +98,6 @@ const Nav = ({ handleInputChange, query }) => {
                     onClick={(e) => handleProfileClick(e, "/user-profile")}
                   >
                     Profile
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="block px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={(e) => handleProfileClick(e, "/manage-products")}
-                  >
-                    Kelola Produk
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="block px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={(e) => handleProfileClick(e, "/upgrade-account")}
-                  >
-                    Upgrade Akun
                   </a>
                 </li>
                 <li>
