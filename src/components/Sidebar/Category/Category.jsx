@@ -5,9 +5,9 @@ import "./Category.css";
 function Category({ handleChange }) {
   return (
     <div>
-      <h2 className="sidebar-title">Category</h2>
+      <h2 className="sidebar-title ms-4">Category</h2>
 
-      <div>
+      <div className="ms-4">
         <label className="sidebar-label-container">
           <input onChange={handleChange} type="radio" value="" name="test" />
           <span className="checkmark"></span>All
