@@ -16,7 +16,7 @@ const LoginModal = ({ show, onClose }) => {
     <div className="modal-backdrop">
       <div className="modal-content">
         <div className="alert-icon">
-          <FaExclamationTriangle size={40} />
+          <FaExclamationTriangle size={40} className="text-purple-600" />
         </div>
         <p>
           To continue you must login first! <br /> Proceed to Login page?
@@ -26,7 +26,7 @@ const LoginModal = ({ show, onClose }) => {
             Cancel
           </button>
           <button
-            className="p-2 px-5 text-white rounded-md bg-slate-900 btn"
+            className="p-2 px-6 text-white bg-purple-600 rounded-md btn"
             onClick={onLogin}
           >
             Login
