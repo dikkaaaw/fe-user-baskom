@@ -8,7 +8,7 @@ import Card from "../../components/Card";
 import products from "../../db/data";
 import "../../index.css";
 
-function App() {
+function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // ----------- Input Filter -----------
@@ -79,4 +79,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;
