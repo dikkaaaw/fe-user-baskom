@@ -8,17 +8,30 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    phone_number: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(`/api/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://baskom-api.up.railway.app/api/v1/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setUser(response.data);
+        setFormData({
+          name: response.data.name,
+          phone_number: response.data.phone_number,
+          address: response.data.address,
+        });
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -28,6 +41,44 @@ const UserProfile = () => {
   }, []);
 
   const avatarUrl = `https://ui-avatars.com/api/?background=random&size=512&name=${user?.name}`;
+
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      // Validate phone number format
+      const phoneNumberRegex = /^\+62\d{10,12}$/;
+      if (!phoneNumberRegex.test(formData.phone_number)) {
+        throw new Error(
+          "Phone number must start with +62 and followed by 10 to 12 digits"
+        );
+      }
+
+      const response = await axios.put(
+        `https://baskom-api.up.railway.app/api/v1/profile`,
+        {
+          name: formData.name,
+          phone_number: formData.phone_number,
+          address: formData.address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error updating profile: ", error);
+      console.log("Server response: ", error.response);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
 
   if (!user) return null;
 
@@ -71,7 +122,7 @@ const UserProfile = () => {
                 className="w-32 h-32 mb-4 rounded-full"
               />
               <h2 className="text-lg font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.phoneNumber}</p>
+              <p className="text-gray-600">{user.phone_number}</p>
             </div>
             <div className="w-full lg:w-3/4">
               <div className="p-6 mb-6 bg-gray-100 rounded-lg">
@@ -87,7 +138,8 @@ const UserProfile = () => {
                       <input
                         type="text"
                         id="name"
-                        value={user.name}
+                        value={formData.name}
+                        onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
                       />
                     </div>
@@ -116,8 +168,9 @@ const UserProfile = () => {
                       </label>
                       <input
                         type="text"
-                        id="phone-number"
-                        value={user.phone_number}
+                        id="phone_number"
+                        value={formData.phone_number}
+                        onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
                       />
                     </div>
@@ -128,12 +181,19 @@ const UserProfile = () => {
                       <textarea
                         id="address"
                         rows="4"
+                        onChange={handleChange}
+                        value={formData.address}
                         className="w-full p-2 border border-gray-300 rounded"
-                      >
-                        {user.address}
-                      </textarea>
+                      />
                     </div>
                   </div>
+                  <button
+                    type="button"
+                    className="px-4 py-2 text-gray-600 bg-gray-300 rounded me-3"
+                    onClick={handleSubmit}
+                  >
+                    Update Profile
+                  </button>
                   <div className="relative inline-block">
                     <button
                       type="button"
