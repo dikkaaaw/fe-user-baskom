@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import "./DetailProductModal.css";
+import { FaLocationDot } from "react-icons/fa6";
 
 const DetailProductModal = ({ show, onClose }) => {
   const dummyProduct = {
@@ -23,10 +24,16 @@ const DetailProductModal = ({ show, onClose }) => {
             <div className="product-details">
               <div className="product-image">
                 <img src={dummyProduct.image} alt={dummyProduct.name} />
+                <button className="flex items-center gap-2 p-2 px-4 mt-4 border border-black rounded-md">
+                  <span>
+                    <FaLocationDot />
+                  </span>
+                  Yogyakarta
+                </button>
               </div>
               <div className="ml-6 product-info">
                 <h2 className="text-3xl">{dummyProduct.name}</h2>
-                <p className="mt-6 product-description pe-6">
+                <p className="mt-6 text-justify product-description pe-6">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Repellat ipsam unde obcaecati quam qui aut cupiditate nesciunt
                   asperiores quibusdam eaque? Lorem ipsum dolor sit amet
@@ -44,9 +51,12 @@ const DetailProductModal = ({ show, onClose }) => {
                   <p>Stock</p>
                   {dummyProduct.stock}
                 </div>
-                <button className="mt-10 add-to-cart-btn">
-                  Chat dengan penjual
-                </button>
+                <div className="flex justify-between">
+                  <span></span>
+                  <button className="p-2 px-4 mt-10 border border-black rounded-md add-to-cart-btn hover:bg-black hover:text-white">
+                    Chat dengan penjual
+                  </button>
+                </div>
               </div>
             </div>
           </div>
