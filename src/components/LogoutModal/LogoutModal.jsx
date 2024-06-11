@@ -23,7 +23,7 @@ const LogoutModal = ({ show, onClose }) => {
     <>
       {show && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal-logout">
             <div className="alert-icon">
               <FaExclamationTriangle size={40} />
             </div>
