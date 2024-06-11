@@ -14,13 +14,27 @@
   
   /* Modal */
   .modal {
+    position: relative;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
     width: 60%;
-    height: 70%;
+    height: 58%;
     z-index: 1100;
+  }
+
+  .modal-container {
+    /* existing styles */
+    transform: scale(0.8); /* start smaller */
+    opacity: 0; /* start invisible */
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out; /* animate transform and opacity */
+    }
+    
+    .modal-container.show {
+      transform: scale(1); /* end at normal size */
+      opacity: 1; /* end fully visible */
+      padding-left: 20px;
   }
   
   
@@ -36,13 +50,14 @@
 
   .product-details {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
   }
   
   .product-image {
     flex: 1;
-    max-width: 50%; /* Atur lebar maksimum gambar */
+    max-width: 50%;
   }
   
   .product-image img {
@@ -50,8 +65,19 @@
     height: auto;
   }
   
+
+  .close-btn {
+    position: absolute;
+    right: 18px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
   .product-info {
-    flex: 1;
-    text-align: center; /* Teks berada di tengah */
+    max-width: 500px; /* Adjust this value as needed */
+    overflow: auto;
   }
   
