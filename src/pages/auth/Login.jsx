@@ -55,7 +55,10 @@ const Login = () => {
     }
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/login", { email, password });
+      const response = await axios.post(
+        `https://baskom-api.up.railway.app/api/v1/login`,
+        { email, password }
+      );
       localStorage.setItem("token", response.data.token);
       toast.success("Login successful!", {
         closeOnClick: true,
