@@ -18,8 +18,8 @@
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    width: 400px;
-    height: 200px;
+    width: 60%;
+    height: 70%;
     z-index: 1100;
   }
   
@@ -32,5 +32,26 @@
   .modal-buttons button {
     font-size: 14px;
     margin-right: 10px;
+  }
+
+  .product-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .product-image {
+    flex: 1;
+    max-width: 50%; /* Atur lebar maksimum gambar */
+  }
+  
+  .product-image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-info {
+    flex: 1;
+    text-align: center; /* Teks berada di tengah */
   }
   
