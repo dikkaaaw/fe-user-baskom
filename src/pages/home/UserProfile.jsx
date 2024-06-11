@@ -11,7 +11,7 @@ const UserProfile = () => {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
-    phone_number: "",
+    phoneNumber: "",
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const UserProfile = () => {
         setUser(response.data);
         setFormData({
           name: response.data.name,
-          phone_number: response.data.phone_number,
+          phoneNumber: response.data.phone_number,
           address: response.data.address,
         });
       } catch (error) {
@@ -45,19 +45,19 @@ const UserProfile = () => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     try {
-      // Validate phone number format
-      const phoneNumberRegex = /^\+62\d{10,12}$/;
-      if (!phoneNumberRegex.test(formData.phone_number)) {
-        throw new Error(
-          "Phone number must start with +62 and followed by 10 to 12 digits"
-        );
-      }
+      // // Validate phone number format
+      // const phoneNumberRegex = /^\+62\d{10,12}$/;
+      // if (!phoneNumberRegex.test(formData.phoneNumber)) {
+      //   throw new Error(
+      //     "Phone number must start with +62 and followed by 10 to 12 digits"
+      //   );
+      // }
 
       const response = await axios.put(
         `https://baskom-api.up.railway.app/api/v1/profile`,
         {
           name: formData.name,
-          phone_number: formData.phone_number,
+          phoneNumber: formData.phoneNumber,
           address: formData.address,
         },
         {
@@ -67,6 +67,7 @@ const UserProfile = () => {
         }
       );
       setUser(response.data);
+      window.location.reload();
     } catch (error) {
       console.error("Error updating profile: ", error);
       console.log("Server response: ", error.response);
@@ -122,7 +123,7 @@ const UserProfile = () => {
                 className="w-32 h-32 mb-4 rounded-full"
               />
               <h2 className="text-lg font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.phone_number}</p>
+              <p className="text-gray-600">{user.phoneNumber}</p>
             </div>
             <div className="w-full lg:w-3/4">
               <div className="p-6 mb-6 bg-gray-100 rounded-lg">
@@ -161,15 +162,15 @@ const UserProfile = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="phone-number"
+                        htmlFor="phoneNumber"
                         className="block text-gray-600"
                       >
                         Phone Number
                       </label>
                       <input
                         type="text"
-                        id="phone_number"
-                        value={formData.phone_number}
+                        id="phoneNumber"
+                        value={formData.phoneNumber}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
                       />
