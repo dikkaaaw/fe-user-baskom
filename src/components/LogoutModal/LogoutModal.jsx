@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./LogoutModal.css";
 
 const LogoutModal = ({ show, onClose }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
