@@ -55,7 +55,10 @@ const SignUp = () => {
       return;
     }
     try {
-      const response = await axios.post("/api/register", user);
+      const response = await axios.post(
+        "https://baskom-api.up.railway.app/api/v1/register",
+        user
+      );
       if (response.status === 201) {
         toast.success("Sign up successful!", {
           closeOnClick: true,
