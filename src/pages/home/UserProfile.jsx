@@ -99,12 +99,15 @@ const UserProfile = () => {
           <aside className="w-full p-6 bg-gray-100 rounded-lg lg:w-1/4">
             <ul className="space-y-4">
               <li>
-                <a href="/user-profile" className="text-gray-600">
+                <a href="/user-profile" className="font-semibold text-gray-60 ">
                   User Profile
                 </a>
               </li>
               <li>
-                <a href="/manage-products" className="text-gray-600">
+                <a
+                  href="/manage-products"
+                  className="text-gray-600 hover:text-black"
+                >
                   Kelola Product
                 </a>
               </li>
@@ -123,7 +126,7 @@ const UserProfile = () => {
                 className="w-32 h-32 mb-4 rounded-full"
               />
               <h2 className="text-lg font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.phoneNumber}</p>
+              <p className="text-gray-600">{user.phone_number}</p>
             </div>
             <div className="w-full lg:w-3/4">
               <div className="p-6 mb-6 bg-gray-100 rounded-lg">
