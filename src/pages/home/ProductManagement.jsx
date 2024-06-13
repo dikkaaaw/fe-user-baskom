@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import LogoutModal from "../../components/LogoutModal/LogoutModal";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -26,6 +28,14 @@ const UserProfile = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowLogoutModal(false);
   };
 
   return (
@@ -60,7 +70,11 @@ const UserProfile = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="font-semibold text-red-500">
+                <a
+                  href="#"
+                  onClick={handleLogout}
+                  className="font-semibold text-red-500"
+                >
                   Sign out
                 </a>
               </li>
@@ -104,6 +118,7 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+      <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
   );
 };
