@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { CircularProgress } from "@mui/material";
 import Navigation from "../../components/Navigation/Nav";
 import Products from "../../components/Products/Products";
 import Recommended from "../../components/Recommended/Recommended";
@@ -69,12 +69,21 @@ function Dashboard() {
 
   const result = filteredData(products, selectedCategory, query);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <>
       <Sidebar handleChange={handleChange} />
       <Navigation query={query} handleInputChange={handleInputChange} />
       <Recommended handleClick={handleClick} />
-      <Products result={result} />
+      {isLoading ? <CircularProgress /> : <Products result={result} />}
     </>
   );
 }
