@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UpgradeAccountModal from "../../components/UpgradeAccountModal/UpgradeAccountModal";
-import { useNavigate } from "react-router-dom";
+import LogoutModal from "../../components/LogoutModal/LogoutModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -45,13 +50,13 @@ const UserProfile = () => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     try {
-      // // Validate phone number format
-      // const phoneNumberRegex = /^\+62\d{10,12}$/;
-      // if (!phoneNumberRegex.test(formData.phoneNumber)) {
-      //   throw new Error(
-      //     "Phone number must start with +62 and followed by 10 to 12 digits"
-      //   );
-      // }
+      // Validate phone number format
+      const phoneNumberRegex = /^\+62\d{10,12}$/;
+      if (!phoneNumberRegex.test(formData.phoneNumber)) {
+        throw new Error(
+          "Phone number must start with +62 and followed by 10 to 12 digits"
+        );
+      }
 
       const response = await axios.put(
         `https://baskom-api.up.railway.app/api/v1/profile`,
@@ -67,10 +72,27 @@ const UserProfile = () => {
         }
       );
       setUser(response.data);
-      window.location.reload();
+      toast.success("Success update profile!", {
+        closeOnClick: true,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
+      setError(error.response.data.message);
+      toast.error("Update profile failed. Please try again.", {
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
       console.error("Error updating profile: ", error);
-      console.log("Server response: ", error.response);
     }
   };
 
@@ -81,11 +103,20 @@ const UserProfile = () => {
     });
   };
 
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowLogoutModal(false);
+  };
+
   if (!user) return null;
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
       <div className="p-6 mx-auto bg-white rounded-lg shadow-lg max-w-7xl">
+        <ToastContainer />
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-semibold">User Profile</h1>
           <button
@@ -112,7 +143,11 @@ const UserProfile = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="font-semibold text-red-500">
+                <a
+                  href="#"
+                  onClick={handleLogout}
+                  className="font-semibold text-red-500"
+                >
                   Sign out
                 </a>
               </li>
@@ -177,6 +212,11 @@ const UserProfile = () => {
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
                       />
+                      {error && (
+                        <div className="text-sm text-center text-red-500">
+                          {error}
+                        </div>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <label htmlFor="address" className="block text-gray-600">
@@ -264,6 +304,7 @@ const UserProfile = () => {
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
       />
+      <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
   );
 };
