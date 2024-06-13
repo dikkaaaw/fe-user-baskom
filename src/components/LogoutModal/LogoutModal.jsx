@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaExclamationTriangle } from "react-icons/fa";
 import PropTypes from "prop-types";
 import "./LogoutModal.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LogoutModal = ({ show, onClose }) => {
   const [, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -14,8 +18,16 @@ const LogoutModal = ({ show, onClose }) => {
   const onLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    onClose();
-    window.location.reload();
+    toast.success("Logout success!", {
+      closeOnClick: true,
+      hideProgressBar: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+    setTimeout(() => {
+      navigate("/home");
+    }, 1500);
   };
 
   if (!show) return null;
@@ -23,6 +35,7 @@ const LogoutModal = ({ show, onClose }) => {
     <>
       {show && (
         <div className="modal-overlay">
+          <ToastContainer />
           <div className="modal-logout">
             <div className="alert-icon">
               <FaExclamationTriangle size={40} />
