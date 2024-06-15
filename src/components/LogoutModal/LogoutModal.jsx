@@ -27,6 +27,7 @@ const LogoutModal = ({ show, onClose }) => {
     });
     setTimeout(() => {
       navigate("/home");
+      window.location.reload();
     }, 1500);
   };
 
