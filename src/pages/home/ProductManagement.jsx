@@ -6,6 +6,8 @@ import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import EditProductModal from "../../components/EditProductModal/EditProductModal";
 import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -79,7 +81,17 @@ const UserProfile = () => {
       setProducts(
         products.filter((product) => product.id !== selectedProduct.id)
       );
-      setShowDeleteModal(false);
+      toast.success("Successfully delete product!", {
+        closeOnClick: true,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        setShowDeleteModal(false);
+        window.location.reload();
+      }, 1200);
     } catch (error) {
       console.error(error);
     }
@@ -97,6 +109,7 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
+      <ToastContainer />
       <div className="p-6 mx-auto bg-white rounded-lg shadow-lg max-w-7xl">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-semibold">Kelola Product</h1>
