@@ -5,6 +5,7 @@ import { FaEye } from "react-icons/fa";
 import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import EditProductModal from "../../components/EditProductModal/EditProductModal";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const UserProfile = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
@@ -61,6 +63,36 @@ const UserProfile = () => {
 
   const handleCloseModal = () => {
     setShowLogoutModal(false);
+  };
+
+  const handleDeleteProduct = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete(
+        `https://baskom-api.up.railway.app/api/v1/products/${selectedProduct.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setProducts(
+        products.filter((product) => product.id !== selectedProduct.id)
+      );
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOpenDeleteModal = (product) => {
+    setSelectedProduct(product);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setSelectedProduct(null);
+    setShowDeleteModal(false);
   };
 
   return (
@@ -155,7 +187,10 @@ const UserProfile = () => {
                         >
                           Edit
                         </button>
-                        <button className="px-4 py-2 text-white bg-red-500 rounded">
+                        <button
+                          className="px-4 py-2 text-white bg-red-500 rounded"
+                          onClick={() => handleOpenDeleteModal(product)}
+                        >
                           Delete
                         </button>
                       </div>
@@ -181,6 +216,11 @@ const UserProfile = () => {
         show={showEditProductModal}
         onClose={handleCloseEditModal}
         product={selectedProduct}
+      />
+      <DeleteModal
+        show={showDeleteModal}
+        onClose={handleCloseDeleteModal}
+        onDelete={handleDeleteProduct}
       />
       <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
