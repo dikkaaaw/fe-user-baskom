@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
-import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye } from "react-icons/fa";
 import LogoutModal from "../../components/LogoutModal/LogoutModal";
+import AddProductModal from "../../components/AddProductModal/AddProductModal";
+import EditProductModal from "../../components/EditProductModal/EditProductModal";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -24,10 +29,30 @@ const UserProfile = () => {
           },
         }
       );
-      setProducts(response.data);
+      const data = response.data;
+      // Ensure that the response is an array
+      setProducts(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleOpenAddModal = () => {
+    setShowAddProductModal(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setShowAddProductModal(false);
+  };
+
+  const handleOpenEditModal = (product) => {
+    setSelectedProduct(product);
+    setShowEditProductModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setSelectedProduct(null);
+    setShowEditProductModal(false);
   };
 
   const handleLogout = () => {
@@ -80,44 +105,83 @@ const UserProfile = () => {
               </li>
             </ul>
           </aside>
-          <div className="flex flex-col flex-1 gap-6 lg:flex-row">
-            <div className="flex flex-col items-center w-full ms-10 lg:w-1/4">
-              <div className="p-6 bg-gray-100 rounded-lg shadow-lg">
-                {products.length === 0 ? (
-                  <div className="p-6 bg-white rounded-lg shadow-lg">
-                    <h2 className="text-xl font-semibold">
-                      No products found. Add a product.
-                    </h2>
-                    <button className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">
-                      Add Product
-                    </button>
-                  </div>
-                ) : (
-                  <div className="p-6 bg-white rounded-lg shadow-lg">
-                    <img
-                      src={products.image}
-                      alt="Product Image"
-                      className="w-32 h-32 mb-4"
-                    />
-                    <h2 className="text-xl font-semibold">{products.name}</h2>
-                    <div className="flex gap-1 mt-4">
-                      <button className="px-3 py-2 text-white bg-gray-500 rounded">
-                        <FaEye className="w-4 h-4" />
-                      </button>
-                      <button className="px-4 py-2 text-white bg-blue-500 rounded">
-                        Edit
-                      </button>
-                      <button className="px-4 py-2 text-white bg-red-500 rounded">
-                        Delete
-                      </button>
+          <div className="flex flex-col items-center w-full lg:w-3/4">
+            <div className="w-full p-6 bg-gray-100 rounded-lg shadow-lg">
+              {products.length === 0 ? (
+                <div className="p-6 bg-white rounded-lg shadow-lg">
+                  <h4 className="text-xl font-semibold">
+                    No products found. Add a product.
+                  </h4>
+                  <button
+                    className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
+                    onClick={handleOpenAddModal}
+                  >
+                    Add Product
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-row flex-wrap gap-4">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="p-4 bg-white rounded-lg shadow-lg w-60"
+                    >
+                      <img
+                        src={product.image}
+                        alt="Product Image"
+                        className="object-cover w-full h-32 mb-4"
+                      />
+                      <h4 className="font-semibold text-md">{product.name}</h4>
+                      <div className="flex justify-between">
+                        <h5 className="text-sm font-medium">Harga</h5>
+                        <h4 className="text-sm font-medium">{product.price}</h4>
+                      </div>
+                      <div className="flex justify-between">
+                        <h5 className="text-sm font-medium">Stock</h5>
+                        <h4 className="text-sm font-medium">{product.qty}</h4>
+                      </div>
+                      <p className="inline-block px-4 text-sm text-black bg-gray-300 rounded-xl">
+                        {product.categories
+                          .map((category) => category.name)
+                          .join(", ")}
+                      </p>
+                      <div className="flex gap-1 mt-4">
+                        <button className="px-3 py-2 text-white bg-gray-500 rounded">
+                          <FaEye className="w-4 h-4" />
+                        </button>
+                        <button
+                          className="px-4 py-2 text-white bg-blue-500 rounded"
+                          onClick={() => handleOpenEditModal(product)}
+                        >
+                          Edit
+                        </button>
+                        <button className="px-4 py-2 text-white bg-red-500 rounded">
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
+              <button
+                className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
+                onClick={handleOpenAddModal}
+              >
+                Add Product
+              </button>
             </div>
           </div>
         </div>
       </div>
+      <AddProductModal
+        show={showAddProductModal}
+        onClose={handleCloseAddModal}
+      />
+      <EditProductModal
+        show={showEditProductModal}
+        onClose={handleCloseEditModal}
+        product={selectedProduct}
+      />
       <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
   );
