@@ -211,12 +211,14 @@ const UserProfile = () => {
                   ))}
                 </div>
               )}
-              <button
-                className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
-                onClick={handleOpenAddModal}
-              >
-                Add Product
-              </button>
+              {products.length > 0 && (
+                <button
+                  className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
+                  onClick={handleOpenAddModal}
+                >
+                  Add Product
+                </button>
+              )}
             </div>
           </div>
         </div>
