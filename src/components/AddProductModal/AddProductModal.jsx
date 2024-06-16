@@ -10,7 +10,7 @@ const AddProductModal = ({ show, onClose }) => {
   const [price, setPrice] = useState("");
   const [qty, setQty] = useState("");
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -36,7 +36,8 @@ const AddProductModal = ({ show, onClose }) => {
     if (!description) newErrors.description = "Description is required";
     if (!price) newErrors.price = "Price is required";
     if (!qty) newErrors.qty = "Quantity is required";
-    if (!selectedCategory) newErrors.selectedCategory = "Category is required";
+    if (selectedCategories.length === 0)
+      newErrors.selectedCategories = "Categories are required";
 
     setErrors(newErrors);
 
@@ -46,7 +47,9 @@ const AddProductModal = ({ show, onClose }) => {
 
   const handleAddProduct = async () => {
     if (!validateForm()) {
-      toast.error("Please fill in all fields and select a category.");
+      toast.error(
+        "Please fill in all fields and select at least one category."
+      );
       return;
     }
 
@@ -56,7 +59,7 @@ const AddProductModal = ({ show, onClose }) => {
       description,
       price,
       qty,
-      categoryIds: [selectedCategory],
+      categoryIds: selectedCategories,
     };
 
     try {
@@ -82,6 +85,19 @@ const AddProductModal = ({ show, onClose }) => {
     } catch (error) {
       toast.error("Failed to add product!");
       console.error(error);
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    const categoryId = parseInt(e.target.value);
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setSelectedCategories([...selectedCategories, categoryId]);
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((id) => id !== categoryId)
+      );
     }
   };
 
@@ -149,22 +165,26 @@ const AddProductModal = ({ show, onClose }) => {
             {errors.qty && <p className="text-sm text-red-500">{errors.qty}</p>}
           </div>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">Category</label>
-            <select
-              className="w-full px-3 py-2 border rounded"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
+            <label className="block mb-2 text-sm font-medium">Categories</label>
+            {categories.map((category) => (
+              <div key={category.id} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={`category-${category.id}`}
+                  value={category.id}
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={handleCategoryChange}
+                  className="mr-2"
+                />
+                <label htmlFor={`category-${category.id}`}>
                   {category.name}
-                </option>
-              ))}
-            </select>
-            {errors.selectedCategory && (
-              <p className="text-sm text-red-500">{errors.selectedCategory}</p>
+                </label>
+              </div>
+            ))}
+            {errors.selectedCategories && (
+              <p className="text-sm text-red-500">
+                {errors.selectedCategories}
+              </p>
             )}
           </div>
           <div className="flex justify-end gap-2">
