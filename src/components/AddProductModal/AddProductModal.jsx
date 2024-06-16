@@ -11,6 +11,7 @@ const AddProductModal = ({ show, onClose }) => {
   const [qty, setQty] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -36,8 +37,8 @@ const AddProductModal = ({ show, onClose }) => {
     if (!description) newErrors.description = "Description is required";
     if (!price) newErrors.price = "Price is required";
     if (!qty) newErrors.qty = "Quantity is required";
-    if (selectedCategories.length === 0)
-      newErrors.selectedCategories = "Categories are required";
+    if (selectedCategories.length === 0 && !newCategory)
+      newErrors.categories = "Please select or enter at least one category";
 
     setErrors(newErrors);
 
@@ -47,19 +48,39 @@ const AddProductModal = ({ show, onClose }) => {
 
   const handleAddProduct = async () => {
     if (!validateForm()) {
-      toast.error(
-        "Please fill in all fields and select at least one category."
-      );
+      toast.error("Please fill in all fields and select or enter a category.");
       return;
     }
 
     const token = localStorage.getItem("token");
+    let categoryIds = selectedCategories;
+
+    if (newCategory) {
+      // Create new category first
+      try {
+        const response = await axios.post(
+          "https://baskom-api.up.railway.app/api/v1/categories",
+          { name: newCategory },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        categoryIds = [...selectedCategories, response.data.id];
+      } catch (error) {
+        toast.error("Failed to create new category!");
+        console.error(error);
+        return;
+      }
+    }
+
     const productData = {
       name,
       description,
       price,
       qty,
-      categoryIds: selectedCategories,
+      categoryIds,
     };
 
     try {
@@ -145,6 +166,7 @@ const AddProductModal = ({ show, onClose }) => {
             <label className="block mb-2 text-sm font-medium">
               Price (Rupiah)
             </label>
+            descri{" "}
             <input
               type="number"
               className="w-full px-3 py-2 border rounded"
@@ -152,6 +174,9 @@ const AddProductModal = ({ show, onClose }) => {
               onChange={(e) => setPrice(e.target.value)}
               required
             />
+            {errors.price && (
+              <p className="text-sm text-red-500">{errors.price}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium">Quantity</label>
@@ -181,10 +206,17 @@ const AddProductModal = ({ show, onClose }) => {
                 </label>
               </div>
             ))}
-            {errors.selectedCategories && (
-              <p className="text-sm text-red-500">
-                {errors.selectedCategories}
-              </p>
+            <div className="flex items-center mt-2">
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded"
+                placeholder="Enter new category"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+            </div>
+            {errors.categories && (
+              <p className="text-sm text-red-500">{errors.categories}</p>
             )}
           </div>
           <div className="flex justify-end gap-2">
