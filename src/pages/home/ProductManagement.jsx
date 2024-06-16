@@ -6,6 +6,7 @@ import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import EditProductModal from "../../components/EditProductModal/EditProductModal";
 import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import DetailSellerProductModal from "../../components/DetailSellerProductModal/DetailSellerProductModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +17,7 @@ const UserProfile = () => {
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailProductModal, setShowDetailProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
@@ -47,6 +49,15 @@ const UserProfile = () => {
 
   const handleCloseAddModal = () => {
     setShowAddProductModal(false);
+  };
+
+  const handleOpenDetailModal = (product) => {
+    setSelectedProduct(product);
+    setShowDetailProductModal(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setShowDetailProductModal(false);
   };
 
   const handleOpenEditModal = (product) => {
@@ -191,7 +202,10 @@ const UserProfile = () => {
                           .join(", ")}
                       </p>
                       <div className="flex gap-1 mt-4">
-                        <button className="px-3 py-2 text-white bg-gray-500 rounded">
+                        <button
+                          className="px-3 py-2 text-white bg-gray-500 rounded"
+                          onClick={handleOpenDetailModal}
+                        >
                           <FaEye className="w-4 h-4" />
                         </button>
                         <button
@@ -236,6 +250,11 @@ const UserProfile = () => {
         show={showDeleteModal}
         onClose={handleCloseDeleteModal}
         onDelete={handleDeleteProduct}
+      />
+      <DetailSellerProductModal
+        show={showDetailProductModal}
+        onClose={handleCloseDetailModal}
+        product={selectedProduct}
       />
       <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
