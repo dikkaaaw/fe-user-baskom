@@ -10,7 +10,7 @@ import DetailSellerProductModal from "../../components/DetailSellerProductModal/
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const UserProfile = () => {
+const ProductManagement = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -262,4 +262,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default ProductManagement;
