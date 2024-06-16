@@ -10,9 +10,11 @@ import DetailSellerProductModal from "../../components/DetailSellerProductModal/
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ProductManagement = () => {
+const UserProfile = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
@@ -23,6 +25,14 @@ const ProductManagement = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      searchProducts();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchTerm]);
 
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
@@ -36,11 +46,32 @@ const ProductManagement = () => {
         }
       );
       const data = response.data;
-      // Ensure that the response is an array
       setProducts(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const searchProducts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `https://baskom-api.up.railway.app/api/v1/products/user?name=${searchTerm}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = response.data;
+      setSearchResults(Array.isArray(data) ? data : [data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
   };
 
   const handleOpenAddModal = () => {
@@ -119,6 +150,9 @@ const ProductManagement = () => {
     setShowDeleteModal(false);
   };
 
+  // Filter products based on search results
+  const displayedProducts = searchTerm ? searchResults : products;
+
   return (
     <div className="min-h-screen p-8 bg-gray-100">
       <ToastContainer />
@@ -164,7 +198,16 @@ const ProductManagement = () => {
           </aside>
           <div className="flex flex-col items-center w-full lg:w-3/4">
             <div className="w-full p-6 bg-gray-100 rounded-lg shadow-lg">
-              {products.length === 0 ? (
+              <div className="flex items-center justify-between mb-4">
+                <input
+                  type="text"
+                  placeholder="Search by product name"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="px-4 py-2 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              {displayedProducts.length === 0 ? (
                 <div className="p-6 bg-white rounded-lg shadow-lg">
                   <h4 className="text-xl font-semibold">
                     No products found. Add a product.
@@ -178,7 +221,7 @@ const ProductManagement = () => {
                 </div>
               ) : (
                 <div className="flex flex-row flex-wrap gap-4">
-                  {products.map((product) => (
+                  {displayedProducts.map((product) => (
                     <div
                       key={product.id}
                       className="p-4 bg-white rounded-lg shadow-lg w-60"
@@ -190,7 +233,7 @@ const ProductManagement = () => {
                       />
                       <h4 className="font-semibold text-md">{product.name}</h4>
                       <div className="flex justify-between">
-                        <h5 className="text-sm font-medium">Harga</h5>
+                        <h5 className="text-sm font-medium">Price</h5>
                         <h4 className="text-sm font-medium">{product.price}</h4>
                       </div>
                       <div className="flex justify-between">
@@ -226,7 +269,7 @@ const ProductManagement = () => {
                   ))}
                 </div>
               )}
-              {products.length > 0 && (
+              {displayedProducts.length > 0 && (
                 <button
                   className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
                   onClick={handleOpenAddModal}
@@ -262,4 +305,4 @@ const ProductManagement = () => {
   );
 };
 
-export default ProductManagement;
+export default UserProfile;
