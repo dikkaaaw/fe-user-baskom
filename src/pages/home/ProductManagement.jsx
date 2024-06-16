@@ -57,6 +57,7 @@ const UserProfile = () => {
   };
 
   const handleCloseDetailModal = () => {
+    setSelectedProduct(null);
     setShowDetailProductModal(false);
   };
 
@@ -204,7 +205,7 @@ const UserProfile = () => {
                       <div className="flex gap-1 mt-4">
                         <button
                           className="px-3 py-2 text-white bg-gray-500 rounded"
-                          onClick={handleOpenDetailModal}
+                          onClick={() => handleOpenDetailModal(product)}
                         >
                           <FaEye className="w-4 h-4" />
                         </button>
