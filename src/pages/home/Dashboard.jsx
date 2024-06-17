@@ -5,11 +5,28 @@ import Products from "../../components/Products/Products";
 import Recommended from "../../components/Recommended/Recommended";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Card from "../../components/Card";
-import products from "../../db/data";
+import axios from "axios";
 import "../../index.css";
+
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
 function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/products`);
+        const data = response.data;
+        setProducts(Array.isArray(data) ? data : [data]);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // ----------- Input Filter -----------
   const [query, setQuery] = useState("");
@@ -18,9 +35,14 @@ function Dashboard() {
     setQuery(event.target.value);
   };
 
-  const filteredItems = products.filter(
-    (product) => product.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-  );
+  const filteredItems =
+    products.length > 0
+      ? products.filter(
+          (product) =>
+            product.title &&
+            product.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        )
+      : [];
 
   // ----------- Radio Filtering -----------
   const handleChange = (event) => {
@@ -52,19 +74,16 @@ function Dashboard() {
       );
     }
 
-    return filteredProducts.map(
-      ({ img, title, star, reviews, prevPrice, newPrice }) => (
-        <Card
-          key={Math.random()}
-          img={img}
-          title={title}
-          star={star}
-          reviews={reviews}
-          prevPrice={prevPrice}
-          newPrice={newPrice}
-        />
-      )
-    );
+    return filteredProducts.map(({ img, name, price, description, qty }) => (
+      <Card
+        key={Math.random()}
+        img={img}
+        name={name}
+        price={price}
+        description={description}
+        qty={qty}
+      />
+    ));
   }
 
   const result = filteredData(products, selectedCategory, query);
