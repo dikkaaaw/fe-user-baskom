@@ -98,10 +98,12 @@ const EditProductModal = ({ show, onClose, product }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
       <div className="relative w-full max-w-lg p-6 mx-auto bg-white rounded-lg shadow-lg">
         <ToastContainer />
-        <h2 className="mb-4 text-2xl font-semibold">Edit Product</h2>
+        <h2 className="mb-4 text-2xl font-semibold text-center">
+          Edit Product
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-600">
+            <label htmlFor="name" className="block font-semibold text-black">
               Name
             </label>
             <input
@@ -116,7 +118,10 @@ const EditProductModal = ({ show, onClose, product }) => {
             )}
           </div>
           <div className="mb-4">
-            <label htmlFor="description" className="block text-gray-600">
+            <label
+              htmlFor="description"
+              className="block font-semibold text-black"
+            >
               Description
             </label>
             <textarea
@@ -130,7 +135,7 @@ const EditProductModal = ({ show, onClose, product }) => {
             )}
           </div>
           <div className="mb-4">
-            <label htmlFor="price" className="block text-gray-600">
+            <label htmlFor="price" className="block font-semibold text-black">
               Price
             </label>
             <input
@@ -145,7 +150,7 @@ const EditProductModal = ({ show, onClose, product }) => {
             )}
           </div>
           <div className="mb-4">
-            <label htmlFor="qty" className="block text-gray-600">
+            <label htmlFor="qty" className="block font-semibold text-black">
               Quantity
             </label>
             <input
@@ -157,7 +162,7 @@ const EditProductModal = ({ show, onClose, product }) => {
             />
             {errors.qty && <p className="text-sm text-red-500">{errors.qty}</p>}
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-center gap-2">
             <button
               type="button"
               className="px-4 py-2 text-white bg-gray-500 rounded"
