@@ -6,6 +6,8 @@ import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
 const UserProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -23,14 +25,11 @@ const UserProfile = () => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(
-          `https://baskom-api.up.railway.app/api/v1/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUser(response.data);
         setFormData({
           name: response.data.name,
@@ -59,7 +58,7 @@ const UserProfile = () => {
       }
 
       const response = await axios.put(
-        `https://baskom-api.up.railway.app/api/v1/profile`,
+        `${API_URL}/profile`,
         {
           name: formData.name,
           phoneNumber: formData.phoneNumber,
