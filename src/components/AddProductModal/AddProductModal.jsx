@@ -19,7 +19,14 @@ const AddProductModal = ({ show, onClose }) => {
   useEffect(() => {
     if (show) {
       fetchCategories();
+      document.body.classList.add("overflow-hidden"); // Menambahkan kelas overflow-hidden ke body saat modal dibuka
+    } else {
+      document.body.classList.remove("overflow-hidden"); // Menghapus kelas overflow-hidden dari body saat modal ditutup
     }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden"); // Menghapus kelas overflow-hidden dari body saat komponen dibersihkan
+    };
   }, [show]);
 
   const fetchCategories = async () => {
@@ -36,13 +43,14 @@ const AddProductModal = ({ show, onClose }) => {
     if (!name) newErrors.name = "Name is required";
     if (!description) newErrors.description = "Description is required";
     if (!price) newErrors.price = "Price is required";
+    if (price < 0) newErrors.price = "Price cannot be negative";
     if (!qty) newErrors.qty = "Quantity is required";
+    if (qty < 0) newErrors.qty = "Quantity cannot be negative";
     if (selectedCategories.length === 0 && !newCategory)
       newErrors.categories = "Please select or enter at least one category";
 
     setErrors(newErrors);
 
-    // If no errors, return true
     return Object.keys(newErrors).length === 0;
   };
 
@@ -56,7 +64,6 @@ const AddProductModal = ({ show, onClose }) => {
     let categoryIds = selectedCategories;
 
     if (newCategory) {
-      // Create new category first
       try {
         const response = await axios.post(
           `${API_URL}/categories`,
@@ -123,8 +130,8 @@ const AddProductModal = ({ show, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
       <ToastContainer />
-      <div className="relative w-full max-w-lg p-6 mx-auto bg-white rounded-lg shadow-lg">
-        <h2 className="mb-4 text-2xl font-semibold">Add Product</h2>
+      <div className="relative w-full max-w-lg p-6 mx-auto overflow-y-auto bg-white rounded-lg shadow-lg h-[650px]">
+        <h2 className="mb-4 text-2xl font-semibold text-center">Add Product</h2>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -132,7 +139,7 @@ const AddProductModal = ({ show, onClose }) => {
           }}
         >
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">Name</label>
+            <label className="block mb-2 text-sm font-semibold">Name</label>
             <input
               type="text"
               className="w-full px-3 py-2 border rounded"
@@ -145,7 +152,7 @@ const AddProductModal = ({ show, onClose }) => {
             )}
           </div>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">
+            <label className="block mb-2 text-sm font-semibold">
               Description
             </label>
             <textarea
@@ -159,15 +166,14 @@ const AddProductModal = ({ show, onClose }) => {
             )}
           </div>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">
+            <label className="block mb-2 text-sm font-semibold">
               Price (Rupiah)
             </label>
-            descri{" "}
             <input
               type="number"
               className="w-full px-3 py-2 border rounded"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setPrice(Math.max(0, e.target.value))}
               required
             />
             {errors.price && (
@@ -175,18 +181,20 @@ const AddProductModal = ({ show, onClose }) => {
             )}
           </div>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">Quantity</label>
+            <label className="block mb-2 text-sm font-semibold">Quantity</label>
             <input
               type="number"
               className="w-full px-3 py-2 border rounded"
               value={qty}
-              onChange={(e) => setQty(e.target.value)}
+              onChange={(e) => setQty(Math.max(0, e.target.value))}
               required
             />
             {errors.qty && <p className="text-sm text-red-500">{errors.qty}</p>}
           </div>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium">Categories</label>
+            <label className="block mb-2 text-sm font-semibold">
+              Categories
+            </label>
             {categories.map((category) => (
               <div key={category.id} className="flex items-center">
                 <input
@@ -206,7 +214,7 @@ const AddProductModal = ({ show, onClose }) => {
               <input
                 type="text"
                 className="w-full px-3 py-2 border rounded"
-                placeholder="Enter new category"
+                placeholder="Enter new category?"
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
@@ -215,7 +223,7 @@ const AddProductModal = ({ show, onClose }) => {
               <p className="text-sm text-red-500">{errors.categories}</p>
             )}
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-center gap-2 mt-6">
             <button
               type="button"
               className="px-4 py-2 text-white bg-gray-500 rounded"
