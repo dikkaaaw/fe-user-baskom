@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
 const EditProductModal = ({ show, onClose, product }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -69,15 +71,11 @@ const EditProductModal = ({ show, onClose, product }) => {
     };
 
     try {
-      await axios.put(
-        `https://baskom-api.up.railway.app/api/v1/products/${product.id}`,
-        productData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`${API_URL}/products/${product.id}`, productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       toast.success("Product edited successfully!", {
         closeOnClick: true,
         hideProgressBar: true,
