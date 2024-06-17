@@ -17,7 +17,6 @@ const DetailProductModal = ({ show, onClose }) => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
     } else {
-      // Redirect to chat with seller (dummy link)
       window.location.href = "https://wa.me/";
     }
   };
