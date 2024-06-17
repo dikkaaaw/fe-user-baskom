@@ -1,25 +1,23 @@
 import { PropTypes } from "prop-types";
-import { BsFillBagFill } from "react-icons/bs";
 
-const Card = ({ img, title, star, reviews, prevPrice, newPrice }) => {
+const Card = ({ img, name, price, description, qty }) => {
   return (
     <>
       <section className="card">
-        <img src={img} alt={title} className="card-img" />
+        <img src={img} alt={name} className="card-img" />
         <div className="card-details">
-          <h3 className="card-title">{title}</h3>
-          <section className="card-reviews">
-            {star} {star} {star} {star}
-            <span className="total-reviews">{reviews}</span>
-          </section>
-          <section className="card-price">
-            <div className="price">
-              <del>{prevPrice}</del> {newPrice}
-            </div>
-            <div className="bag">
-              <BsFillBagFill className="bag-icon" />
-            </div>
-          </section>
+          <h3 className="card-title">
+            <strong>{name}</strong>
+          </h3>
+          <section className="card-description">{description}</section>
+          <div className="flex justify-between">
+            <p>Price</p>
+            <div>{price}</div>
+          </div>
+          <div className="flex justify-between">
+            <p>Stock</p>
+            <div>{qty}</div>
+          </div>
         </div>
       </section>
     </>
@@ -28,11 +26,10 @@ const Card = ({ img, title, star, reviews, prevPrice, newPrice }) => {
 
 Card.propTypes = {
   img: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  star: PropTypes.node.isRequired,
-  reviews: PropTypes.string.isRequired,
-  prevPrice: PropTypes.string.isRequired,
-  newPrice: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired,
+  qty: PropTypes.number.isRequired,
 };
 
 export default Card;
