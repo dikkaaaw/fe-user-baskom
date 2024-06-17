@@ -19,6 +19,8 @@ const ProductManagement = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDetailProductModal, setShowDetailProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6;
 
   const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
@@ -37,6 +39,7 @@ const ProductManagement = () => {
       const data = response.data;
       // Ensure that the response is an array
       setProducts(Array.isArray(data) ? data : [data]);
+      setCurrentPage(1);
     } catch (error) {
       console.error(error);
     }
@@ -115,6 +118,34 @@ const ProductManagement = () => {
     setShowDeleteModal(false);
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Logic for displaying products
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers.map((number) => (
+      <button
+        key={number}
+        onClick={() => handlePageChange(number)}
+        className={`px-4 py-2 ${currentPage === number ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} rounded`}
+      >
+        {number}
+      </button>
+    ));
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gray-100">
       <ToastContainer />
@@ -174,7 +205,7 @@ const ProductManagement = () => {
                 </div>
               ) : (
                 <div className="flex flex-row flex-wrap gap-4">
-                  {products.map((product) => (
+                  {currentProducts.map((product) => (
                     <div
                       key={product.id}
                       className="p-4 bg-white rounded-lg shadow-lg w-60"
@@ -223,12 +254,15 @@ const ProductManagement = () => {
                 </div>
               )}
               {products.length > 0 && (
-                <button
-                  className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
-                  onClick={handleOpenAddModal}
-                >
-                  Add Product
-                </button>
+                <div className="flex items-center justify-between mt-4">
+                  <button
+                    className="px-4 py-2 text-white bg-blue-500 rounded"
+                    onClick={handleOpenAddModal}
+                  >
+                    Add Product
+                  </button>
+                  <div className="flex gap-2">{renderPageNumbers()}</div>
+                </div>
               )}
             </div>
           </div>
