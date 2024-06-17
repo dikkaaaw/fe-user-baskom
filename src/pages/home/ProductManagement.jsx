@@ -20,7 +20,7 @@ const ProductManagement = () => {
   const [showDetailProductModal, setShowDetailProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
   useEffect(() => {
     fetchProducts();
@@ -81,14 +81,11 @@ const ProductManagement = () => {
   const handleDeleteProduct = async () => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(
-        `${REACT_APP_API_URL}/products/${selectedProduct.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${API_URL}/products/${selectedProduct.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProducts(
         products.filter((product) => product.id !== selectedProduct.id)
       );
