@@ -154,10 +154,15 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
         )}
         {step === 3 && (
           <div className="p-8">
-            <h2 className="mb-6 text-2xl font-semibold">Upgrade Account</h2>
+            <h2 className="mb-6 text-2xl font-semibold text-center">
+              Upgrade Account
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block font-semibold text-black"
+                >
                   Email
                 </label>
                 <input
@@ -170,7 +175,10 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-gray-700">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block font-semibold text-black"
+                >
                   Phone Number
                 </label>
                 <input
@@ -183,7 +191,10 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="file" className="block text-gray-700">
+                <label
+                  htmlFor="file"
+                  className="block font-semibold text-black"
+                >
                   Upload File
                 </label>
                 <input
