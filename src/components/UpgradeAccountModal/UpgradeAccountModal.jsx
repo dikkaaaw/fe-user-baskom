@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
 const UpgradeAccountModal = ({ isOpen, closeModal }) => {
   const [user, setUser] = useState(null);
   const [formData, setFormData] = useState(null);
@@ -14,14 +16,11 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(
-          `https://baskom-api.up.railway.app/api/v1/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -48,16 +47,12 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.post(
-        `https://baskom-api.up.railway.app/api/v1/upgrade-roles`,
-        formDataApi,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`${API_URL}/upgrade-roles`, formDataApi, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Upgrade request submitted successfully!", {
         autoClose: 1500,
         closeOnClick: true,
