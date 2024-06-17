@@ -14,6 +14,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import imgLogo from "../../assets/img-logo-2.png";
 
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,10 +57,10 @@ const Login = () => {
     }
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `https://baskom-api.up.railway.app/api/v1/login`,
-        { email, password }
-      );
+      const response = await axios.post(`${API_URL}/login`, {
+        email,
+        password,
+      });
       localStorage.setItem("token", response.data.token);
       toast.success("Login successful!", {
         closeOnClick: true,
