@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
 const AddProductModal = ({ show, onClose }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -22,9 +24,7 @@ const AddProductModal = ({ show, onClose }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        "https://baskom-api.up.railway.app/api/v1/categories"
-      );
+      const response = await axios.get(`${API_URL}/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
@@ -59,7 +59,7 @@ const AddProductModal = ({ show, onClose }) => {
       // Create new category first
       try {
         const response = await axios.post(
-          "https://baskom-api.up.railway.app/api/v1/categories",
+          `${API_URL}/categories`,
           { name: newCategory },
           {
             headers: {
@@ -84,15 +84,11 @@ const AddProductModal = ({ show, onClose }) => {
     };
 
     try {
-      await axios.post(
-        "https://baskom-api.up.railway.app/api/v1/products",
-        productData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${API_URL}/products`, productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       toast.success("Product added successfully!", {
         closeOnClick: true,
         hideProgressBar: true,
