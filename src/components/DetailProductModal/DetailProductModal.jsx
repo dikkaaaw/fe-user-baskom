@@ -2,16 +2,35 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import LoginModal from "../LoginModal/LoginModal";
+import axios from "axios";
 import "./DetailProductModal.css";
 
-const DetailProductModal = ({ show, onClose }) => {
+const API_URL = "https://baskom-api.up.railway.app/api/v1";
+
+const DetailProductModal = ({ show, onClose, productId }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    if (productId) {
+      const fetchProduct = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/products/${productId}`);
+          setProduct(response.data);
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      };
+
+      fetchProduct();
+    }
+  }, [productId]);
 
   const handleChatWithSeller = () => {
     if (!isLoggedIn) {
@@ -21,16 +40,9 @@ const DetailProductModal = ({ show, onClose }) => {
     }
   };
 
-  const dummyProduct = {
-    name: "Dummy Product",
-    description: "This is a dummy product",
-    price: 10.99,
-    condition: "New",
-    stock: 50,
-    image: "https://via.placeholder.com/150",
-  };
-
   if (!show) return null;
+  if (!product) return <div>Loading...</div>;
+
   return (
     <>
       <div className="modal-overlay">
@@ -40,7 +52,7 @@ const DetailProductModal = ({ show, onClose }) => {
           </button>
           <div className="product-details">
             <div className="product-image">
-              <img src={dummyProduct.image} alt={dummyProduct.name} />
+              <img src={product.image} alt={product.name} />
               <button className="flex items-center gap-2 p-2 px-4 mt-4 border border-black rounded-md">
                 <span>
                   <FaLocationDot />
@@ -49,24 +61,23 @@ const DetailProductModal = ({ show, onClose }) => {
               </button>
             </div>
             <div className="ml-6 product-info">
-              <h2 className="text-3xl">{dummyProduct.name}</h2>
-              <p className="mt-6 text-justify product-description pe-6">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellat ipsam unde obcaecati quam qui aut cupiditate nesciunt
-                asperiores quibusdam eaque? Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Vero, rem?
-              </p>
+              <h2 className="mb-2 text-3xl">{product.name}</h2>
+              <div className="mb-2">
+                <div className="p-2 break-words whitespace-pre-wrap border rounded">
+                  {product.description}
+                </div>
+              </div>
               <div className="flex justify-between mt-10 pe-6">
                 <p>Price </p>
-                {dummyProduct.price}
+                {product.price}
               </div>
               <div className="flex justify-between pe-6">
                 <p>Condition</p>
-                {dummyProduct.condition}
+                {product.condition}
               </div>
               <div className="flex justify-between pe-6">
                 <p>Stock</p>
-                {dummyProduct.stock}
+                {product.qty}
               </div>
               <div className="flex justify-between">
                 <span></span>
@@ -92,6 +103,7 @@ const DetailProductModal = ({ show, onClose }) => {
 DetailProductModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  productId: PropTypes.number, // Add productId prop type
 };
 
 export default DetailProductModal;
