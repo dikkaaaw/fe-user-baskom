@@ -12,8 +12,16 @@ const API_URL = "https://baskom-api.up.railway.app/api/v1";
 function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,6 +46,10 @@ function Dashboard() {
     fetchCategories();
   }, []);
 
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -46,9 +58,11 @@ function Dashboard() {
     setSelectedPrice(event.target.value);
   };
 
-  const filterProducts = (products, category, price) => {
+  const filterProducts = (products, category, price, search) => {
     return products.filter((product) => {
-      const matchCategory = category ? product.category === category : true;
+      const matchCategory = category
+        ? product.categories.some((c) => c.name === category)
+        : true;
       const matchPrice =
         price === "50"
           ? product.price <= 50000
@@ -62,23 +76,20 @@ function Dashboard() {
                   ? product.price > 200000
                   : true;
 
-      return matchCategory && matchPrice;
+      const matchSearch = product.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      return matchCategory && matchPrice && matchSearch;
     });
   };
 
   const filteredProducts = filterProducts(
     products,
     selectedCategory,
-    selectedPrice
+    selectedPrice,
+    searchQuery
   );
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
 
   return (
     <>
@@ -87,7 +98,7 @@ function Dashboard() {
         handlePriceChange={handlePriceChange}
         categories={categories}
       />
-      <Navigation />
+      <Navigation handleInputChange={handleInputChange} query={searchQuery} />
       <Recommended />
       {isLoading ? (
         <CircularProgress />
