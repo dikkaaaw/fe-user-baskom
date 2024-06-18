@@ -162,6 +162,24 @@ const EditProductModal = ({ show, onClose, product }) => {
             />
             {errors.qty && <p className="text-sm text-red-500">{errors.qty}</p>}
           </div>
+          <div className="mb-4">
+            <label
+              htmlFor="categories"
+              className="block font-semibold text-black"
+            >
+              Categories
+            </label>
+            <div id="categories" className="flex flex-wrap gap-2">
+              {product.categories.map((category) => (
+                <span
+                  key={category.id}
+                  className="px-2 py-1 text-sm bg-gray-200 rounded"
+                >
+                  {category.name}
+                </span>
+              ))}
+            </div>
+          </div>
           <div className="flex justify-center gap-2">
             <button
               type="button"
@@ -192,6 +210,12 @@ EditProductModal.propTypes = {
     description: PropTypes.string,
     price: PropTypes.number,
     qty: PropTypes.number,
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
   }),
 };
 
