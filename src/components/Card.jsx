@@ -1,15 +1,14 @@
 import { PropTypes } from "prop-types";
 
-const Card = ({ img, name, price, description, qty }) => {
+const Card = ({ img, name, price, qty, onClick }) => {
   return (
     <>
-      <section className="card">
+      <section className="card" onClick={onClick}>
         <img src={img} alt={name} className="card-img" />
         <div className="card-details">
           <h3 className="card-title">
             <strong>{name}</strong>
           </h3>
-          <section className="card-description">{description}</section>
           <div className="flex justify-between">
             <p>Price</p>
             <div>{price}</div>
@@ -30,6 +29,7 @@ Card.propTypes = {
   price: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
   qty: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Card;
