@@ -4,94 +4,77 @@ import Navigation from "../../components/Navigation/Nav";
 import Products from "../../components/Products/Products";
 import Recommended from "../../components/Recommended/Recommended";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import Card from "../../components/Card";
 import axios from "axios";
 import "../../index.css";
 
 const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
 function Dashboard() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState("");
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/products`);
-        const data = response.data;
-        setProducts(Array.isArray(data) ? data : [data]);
+        setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
 
-    fetchData();
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/categories`);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchProducts();
+    fetchCategories();
   }, []);
 
-  // ----------- Input Filter -----------
-  const [query, setQuery] = useState("");
-
-  const handleInputChange = (event) => {
-    setQuery(event.target.value);
-  };
-
-  const filteredItems =
-    products.length > 0
-      ? products.filter(
-          (product) =>
-            product.title &&
-            product.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        )
-      : [];
-
-  // ----------- Radio Filtering -----------
-  const handleChange = (event) => {
+  const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
-  // ------------ Button Filtering -----------
-  const handleClick = (event) => {
-    setSelectedCategory(event.target.value);
+  const handlePriceChange = (event) => {
+    setSelectedPrice(event.target.value);
   };
 
-  function filteredData(products, selected, query) {
-    let filteredProducts = products;
+  const filterProducts = (products, category, price) => {
+    return products.filter((product) => {
+      const matchCategory = category ? product.category === category : true;
+      const matchPrice =
+        price === "50"
+          ? product.price <= 50000
+          : price === "100"
+            ? product.price > 50000 && product.price <= 100000
+            : price === "150"
+              ? product.price > 100000 && product.price <= 150000
+              : price === "200"
+                ? product.price > 150000 && product.price <= 200000
+                : price === "200+"
+                  ? product.price > 200000
+                  : true;
 
-    // Filtering Input Items
-    if (query) {
-      filteredProducts = filteredItems;
-    }
+      return matchCategory && matchPrice;
+    });
+  };
 
-    // Applying selected filter
-    if (selected) {
-      filteredProducts = filteredProducts.filter(
-        ({ category, color, company, newPrice, title }) =>
-          category === selected ||
-          color === selected ||
-          company === selected ||
-          newPrice === selected ||
-          title === selected
-      );
-    }
-
-    return filteredProducts.map(({ img, name, price, description, qty }) => (
-      <Card
-        key={Math.random()}
-        img={img}
-        name={name}
-        price={price}
-        description={description}
-        qty={qty}
-      />
-    ));
-  }
-
-  const result = filteredData(products, selectedCategory, query);
+  const filteredProducts = filterProducts(
+    products,
+    selectedCategory,
+    selectedPrice
+  );
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading delay
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -99,10 +82,18 @@ function Dashboard() {
 
   return (
     <>
-      <Sidebar handleChange={handleChange} />
-      <Navigation query={query} handleInputChange={handleInputChange} />
-      <Recommended handleClick={handleClick} />
-      {isLoading ? <CircularProgress /> : <Products result={result} />}
+      <Sidebar
+        handleCategoryChange={handleCategoryChange}
+        handlePriceChange={handlePriceChange}
+        categories={categories}
+      />
+      <Navigation />
+      <Recommended />
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <Products result={filteredProducts} />
+      )}
     </>
   );
 }
