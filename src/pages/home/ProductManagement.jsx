@@ -37,7 +37,6 @@ const ProductManagement = () => {
         },
       });
       const data = response.data;
-      // Ensure that the response is an array
       setProducts(Array.isArray(data) ? data : [data]);
       setCurrentPage(1);
     } catch (error) {
@@ -218,16 +217,20 @@ const ProductManagement = () => {
                       <h4 className="font-semibold text-md">{product.name}</h4>
                       <div className="flex justify-between">
                         <h5 className="text-sm font-medium">Harga</h5>
-                        <h4 className="text-sm font-medium">{product.price}</h4>
+                        <h4 className="text-sm font-semibold">
+                          {product.price}
+                        </h4>
                       </div>
                       <div className="flex justify-between">
                         <h5 className="text-sm font-medium">Stock</h5>
-                        <h4 className="text-sm font-medium">{product.qty}</h4>
+                        <h4 className="text-sm font-semibold">{product.qty}</h4>
                       </div>
-                      <p className="inline-block px-4 text-sm text-black bg-gray-300 rounded-xl">
-                        {product.categories
-                          .map((category) => category.name)
-                          .join(", ")}
+                      <p className="inline-block px-4 text-sm text-black bg-slate-300 rounded-xl">
+                        <i>
+                          {product.categories
+                            .map((category) => category.name)
+                            .join(", ")}
+                        </i>
                       </p>
                       <div className="flex gap-1 mt-4">
                         <button
