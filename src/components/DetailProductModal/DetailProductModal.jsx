@@ -36,7 +36,7 @@ const DetailProductModal = ({ show, onClose, productId }) => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
     } else {
-      window.location.href = "https://wa.me/";
+      window.location.href = `https://wa.me/${product.user.phone_number}`;
     }
   };
 
@@ -52,7 +52,11 @@ const DetailProductModal = ({ show, onClose, productId }) => {
           </button>
           <div className="product-details">
             <div className="product-image">
-              <img src={product.image} alt={product.name} />
+              <img
+                // src={product.image || "https://via.placeholder.com/150"}
+                src="https://via.placeholder.com/150"
+                alt={product.name}
+              />
               <button className="flex items-center gap-2 p-2 px-4 mt-4 border border-black rounded-md">
                 <span>
                   <FaLocationDot />
@@ -63,21 +67,33 @@ const DetailProductModal = ({ show, onClose, productId }) => {
             <div className="ml-6 product-info">
               <h2 className="mb-2 text-3xl">{product.name}</h2>
               <div className="mb-2">
-                <div className="p-2 break-words whitespace-pre-wrap border rounded">
+                <div className="p-2 overflow-y-auto break-words whitespace-pre-wrap border rounded max-h-24">
                   {product.description}
                 </div>
               </div>
-              <div className="flex justify-between mt-10 pe-6">
-                <p>Price </p>
-                Rp. {product.price}
+
+              <div className="flex justify-between mt-6 pe-6">
+                <p>Price</p>
+                <p className="font-semibold">
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0,
+                  }).format(product.price)}
+                </p>
               </div>
+
               <div className="flex justify-between pe-6">
                 <p>Condition</p>
-                {product.condition}
+                <p className="font-semibold">{product.condition}</p>
               </div>
               <div className="flex justify-between pe-6">
                 <p>Stock</p>
-                {product.qty}
+                <p className="font-semibold"> {product.qty}</p>
+              </div>
+              <div className="flex justify-between pe-6">
+                <p>Posted by</p>
+                <p className="font-semibold">{product.user.name}</p>
               </div>
               <div className="flex justify-between">
                 <span></span>
