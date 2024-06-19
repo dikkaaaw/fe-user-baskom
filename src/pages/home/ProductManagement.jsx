@@ -210,7 +210,7 @@ const ProductManagement = () => {
                       className="p-4 bg-white rounded-lg shadow-lg w-60"
                     >
                       <img
-                        src={product.image}
+                        src="https://via.placeholder.com/150"
                         alt="Product Image"
                         className="object-cover w-full h-32 mb-4"
                       />
@@ -218,7 +218,11 @@ const ProductManagement = () => {
                       <div className="flex justify-between">
                         <h5 className="text-sm font-medium">Harga</h5>
                         <h4 className="text-sm font-semibold">
-                          {product.price}
+                          {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            maximumFractionDigits: 0,
+                          }).format(product.price)}
                         </h4>
                       </div>
                       <div className="flex justify-between">
