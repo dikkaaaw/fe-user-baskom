@@ -57,7 +57,8 @@
   
   .product-image {
     flex: 1;
-    max-width: 50%;
+    max-width: 250px;
+    max-height: 250px;
   }
   
   .product-image img {
