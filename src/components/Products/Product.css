@@ -9,6 +9,7 @@
 .card {
   margin: 20px;
   border: 2px solid #ededed;
+  width: 15rem;
   padding: 20px;
   cursor: pointer;
 }
@@ -16,6 +17,8 @@
 .card-img {
   width: 13rem;
   margin-bottom: 1rem;
+  object-fit: cover;
+  
 }
 
 .card-title {
