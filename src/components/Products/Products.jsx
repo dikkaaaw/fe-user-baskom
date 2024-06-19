@@ -28,7 +28,7 @@ const Products = ({ result }) => {
               onClick={() => handleModal(product.id)}
             >
               <img
-                src={product.image}
+                src="https://via.placeholder.com/150"
                 alt={product.name}
                 className="card-img"
               />
@@ -38,7 +38,13 @@ const Products = ({ result }) => {
                 </h3>
                 <div className="flex justify-between">
                   <p>Harga</p>
-                  <div className="font-semibold">Rp. {product.price}</div>
+                  <div className="font-semibold">
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0,
+                    }).format(product.price)}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <p>Stock</p>
