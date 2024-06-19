@@ -5,29 +5,29 @@ import officeImg from "../../assets/about-us.jpg";
 const AboutUs = () => {
   const teamMembers = [
     {
-      name: "Team Member 1",
+      name: "Rakannanda Erdy Suprapto",
       image: "https://via.placeholder.com/150",
-      description: "Description for team member 1.",
+      description: "Scrum Master",
     },
     {
-      name: "Team Member 2",
+      name: "Muhammad Riski Febrianto",
       image: "https://via.placeholder.com/150",
-      description: "Description for team member 2.",
+      description: "Product Manager",
     },
     {
-      name: "Team Member 3",
+      name: "Martinus Juan Prasetyo",
       image: "https://via.placeholder.com/150",
-      description: "Description for team member 3.",
+      description: "Backend Developer",
     },
     {
-      name: "Team Member 4",
+      name: "Dika Wicaksono",
       image: "https://via.placeholder.com/150",
-      description: "Description for team member 4.",
+      description: "Frontend Developer",
     },
     {
-      name: "Team Member 5",
+      name: "Mutia Zahirma",
       image: "https://via.placeholder.com/150",
-      description: "Description for team member 5.",
+      description: "UI/UX Designer",
     },
   ];
 
@@ -68,7 +68,7 @@ const AboutUs = () => {
           </p>
         </section>
 
-        <div className="flex justify-center my-12">
+        <div className="flex justify-center mb-4">
           <img
             src={officeImg}
             alt="Office Image"
@@ -76,7 +76,7 @@ const AboutUs = () => {
           />
         </div>
 
-        <div className="my-12 text-center">
+        <div className="text-center">
           <blockquote className="text-xl italic font-semibold">
             “Our work does make sense only if it is a <br /> faithful witness of
             his time.”
@@ -85,16 +85,14 @@ const AboutUs = () => {
         </div>
 
         <section className="my-12">
-          <h2 className="mt-10 mb-4 text-3xl font-bold text-center">
-            THE TEAM.
-          </h2>
+          <h2 className="mt-10 text-3xl font-bold text-center">THE TEAM.</h2>
           <p className="mb-8 text-lg text-center">
             These people work on making our product best.
           </p>
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className={`flex flex-col md:flex-row items-center my-8 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
+              className={`flex flex-col md:flex-row items-center my-4 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
             >
               <div className="p-4 md:w-1/3">
                 <img
@@ -105,7 +103,9 @@ const AboutUs = () => {
               </div>
               <div className="p-4 text-center md:w-2/3 md:text-left">
                 <h3 className="mb-2 text-2xl font-bold">{member.name}</h3>
-                <p className="text-lg">{member.description}</p>
+                <p className="text-lg">
+                  <i>{member.description}</i>
+                </p>
               </div>
             </div>
           ))}
