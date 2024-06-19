@@ -15,17 +15,18 @@ const AddProductModal = ({ show, onClose }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
   const [errors, setErrors] = useState({});
+  const [descriptionLength, setDescriptionLength] = useState(0);
 
   useEffect(() => {
     if (show) {
       fetchCategories();
-      document.body.classList.add("overflow-hidden"); // Menambahkan kelas overflow-hidden ke body saat modal dibuka
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.classList.remove("overflow-hidden"); // Menghapus kelas overflow-hidden dari body saat modal ditutup
+      document.body.classList.remove("overflow-hidden");
     }
 
     return () => {
-      document.body.classList.remove("overflow-hidden"); // Menghapus kelas overflow-hidden dari body saat komponen dibersihkan
+      document.body.classList.remove("overflow-hidden");
     };
   }, [show]);
 
@@ -41,7 +42,12 @@ const AddProductModal = ({ show, onClose }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!name) newErrors.name = "Name is required";
-    if (!description) newErrors.description = "Description is required";
+    if (!description) {
+      newErrors.description = "Description is required";
+    } else if (description.length < 120) {
+      newErrors.description =
+        "Description must be at least 120 characters long";
+    }
     if (!price) newErrors.price = "Price is required";
     if (price < 0) newErrors.price = "Price cannot be negative";
     if (!qty) newErrors.qty = "Quantity is required";
@@ -125,6 +131,11 @@ const AddProductModal = ({ show, onClose }) => {
     }
   };
 
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+    setDescriptionLength(e.target.value.length);
+  };
+
   if (!show) return null;
 
   return (
@@ -158,9 +169,12 @@ const AddProductModal = ({ show, onClose }) => {
             <textarea
               className="w-full px-3 py-2 border rounded"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleDescriptionChange}
               required
             />
+            <p className="text-sm text-gray-500">
+              {descriptionLength} / 120 characters
+            </p>
             {errors.description && (
               <p className="text-sm text-red-500">{errors.description}</p>
             )}
