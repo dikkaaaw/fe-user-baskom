@@ -69,7 +69,7 @@ const DetailProductModal = ({ show, onClose, productId }) => {
               </div>
               <div className="flex justify-between mt-10 pe-6">
                 <p>Price </p>
-                {product.price}
+                Rp. {product.price}
               </div>
               <div className="flex justify-between pe-6">
                 <p>Condition</p>
@@ -103,7 +103,7 @@ const DetailProductModal = ({ show, onClose, productId }) => {
 DetailProductModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  productId: PropTypes.number, // Add productId prop type
+  productId: PropTypes.number,
 };
 
 export default DetailProductModal;
