@@ -185,7 +185,7 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
                   type="tel"
                   id="phoneNumber"
                   name="phoneNumber"
-                  value={user.phoneNumber}
+                  value={user.phone_number}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled
                 />
