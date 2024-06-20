@@ -17,6 +17,17 @@ const Products = ({ result }) => {
     setSelectedProductId(null);
   };
 
+  const getCategoryColor = (categoryName) => {
+    const colors = {
+      Electronics: "bg-blue-200",
+      Accessories: "bg-green-200",
+      Clothing: "bg-red-200",
+      Furniture: "bg-yellow-200",
+      string: "bg-purple-200",
+    };
+    return colors[categoryName] || "bg-gray-200";
+  };
+
   return (
     <>
       {result.length > 0 ? (
@@ -52,13 +63,15 @@ const Products = ({ result }) => {
                 </div>
                 <div className="flex flex-col">
                   <p className="mt-2">Kategori</p>
-                  <div className="px-2 mt-1 rounded-xl bg-slate-200">
-                    {" "}
-                    <i>
-                      {product.categories
-                        .map((category) => category.name)
-                        .join(", ")}
-                    </i>
+                  <div className="mt-1 rounded-xl">
+                    {product.categories.map((category) => (
+                      <span
+                        key={category.id}
+                        className={`px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                      >
+                        <i>{category.name}</i>
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -67,7 +80,6 @@ const Products = ({ result }) => {
         </section>
       ) : (
         <div className="product-not-found">
-          {" "}
           <i>Product not found..</i>
         </div>
       )}
