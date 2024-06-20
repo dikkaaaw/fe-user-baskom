@@ -49,7 +49,6 @@ const UserProfile = () => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     try {
-      // Validate phone number format
       const phoneNumberRegex = /^\+62\d{10,12}$/;
       if (!phoneNumberRegex.test(formData.phoneNumber)) {
         throw new Error(
@@ -120,7 +119,7 @@ const UserProfile = () => {
           <h1 className="text-3xl font-semibold">User Profile</h1>
           <button
             onClick={() => navigate("/home")}
-            className="px-4 py-2 text-white bg-blue-500 rounded"
+            className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
           >
             Back to Home
           </button>
@@ -232,7 +231,7 @@ const UserProfile = () => {
                   </div>
                   <button
                     type="button"
-                    className="px-4 py-2 text-gray-600 bg-gray-300 rounded me-3"
+                    className="px-4 py-2 text-sm text-white bg-blue-500 rounded me-3"
                     onClick={handleSubmit}
                   >
                     Update Profile
@@ -240,7 +239,7 @@ const UserProfile = () => {
                   <div className="relative inline-block">
                     <button
                       type="button"
-                      className="px-4 py-2 text-gray-600 bg-gray-300 rounded"
+                      className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
                       onClick={() => setIsModalOpen(true)}
                     >
                       Upgrade Account
