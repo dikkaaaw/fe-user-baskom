@@ -39,7 +39,11 @@ const Products = ({ result }) => {
               onClick={() => handleModal(product.id)}
             >
               <img
-                src="https://via.placeholder.com/150"
+                src={
+                  product.images.length > 0
+                    ? product.images[0].url
+                    : "https://via.placeholder.com/150"
+                }
                 alt={product.name}
                 className="card-img"
               />
