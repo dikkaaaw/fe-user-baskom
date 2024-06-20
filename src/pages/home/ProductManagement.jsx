@@ -19,6 +19,7 @@ const ProductManagement = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDetailProductModal, setShowDetailProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -31,6 +32,7 @@ const ProductManagement = () => {
   const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
   useEffect(() => {
+    fetchUserRole();
     fetchProducts();
   }, []);
 
@@ -45,6 +47,22 @@ const ProductManagement = () => {
       const data = response.data;
       setProducts(Array.isArray(data) ? data : [data]);
       setCurrentPage(1);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchUserRole = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${API_URL}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { roles } = response.data;
+      const userRole = roles.find((role) => role.name === "Penjual");
+      setUserRole(userRole);
     } catch (error) {
       console.error(error);
     }
@@ -105,6 +123,13 @@ const ProductManagement = () => {
   };
 
   const handleOpenAddModal = () => {
+    if (!userRole) {
+      toast.error(
+        "You are not a seller, upgrade your account to seller first!"
+      );
+      return;
+    }
+    setShowAddProductModal(true);
     setShowAddProductModal(true);
   };
 
@@ -162,7 +187,7 @@ const ProductManagement = () => {
           <h1 className="text-3xl font-semibold">Kelola Product</h1>
           <button
             onClick={() => navigate("/home")}
-            className="px-4 py-2 text-white bg-blue-500 rounded"
+            className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
           >
             Back to Home
           </button>
@@ -240,12 +265,19 @@ const ProductManagement = () => {
                       </div>
                       <p className="inline-block mt-2 text-sm text-black rounded-xl">
                         <i>
-                          {product.categories.map((category) => (
+                          {product.categories.map((category, index) => (
                             <span
                               key={category.id}
-                              className={`px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                              className={`inline-block px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                              style={{
+                                whiteSpace: "nowrap",
+                                marginBottom: "2px",
+                              }}
                             >
                               <i>{category.name}</i>
+                              {index !== product.categories.length - 1 && (
+                                <div style={{ height: "1px" }} />
+                              )}
                             </span>
                           ))}
                         </i>
