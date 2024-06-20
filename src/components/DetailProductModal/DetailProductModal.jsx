@@ -65,8 +65,11 @@ const DetailProductModal = ({ show, onClose, productId }) => {
           <div className="product-details">
             <div className="product-image">
               <img
-                // src={product.image || "https://via.placeholder.com/150"}
-                src="https://via.placeholder.com/150"
+                src={
+                  product.images.length > 0
+                    ? product.images[0].url
+                    : "https://via.placeholder.com/150"
+                }
                 alt={product.name}
               />
               <button className="flex items-center gap-2 p-2 px-4 mt-4 border border-black rounded-md">
