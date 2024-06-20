@@ -109,6 +109,10 @@ const UserProfile = () => {
     setShowLogoutModal(false);
   };
 
+  const handleManageProducts = () => {
+    navigate("/manage-products", { state: { user } });
+  };
+
   if (!user) return null;
 
   return (
@@ -135,6 +139,7 @@ const UserProfile = () => {
               <li>
                 <a
                   href="/manage-products"
+                  onClick={handleManageProducts}
                   className="text-gray-600 hover:text-black"
                 >
                   Kelola Product
@@ -301,6 +306,7 @@ const UserProfile = () => {
       <UpgradeAccountModal
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
+        userId={user.user_id}
       />
       <LogoutModal show={showLogoutModal} onClose={handleCloseModal} />
     </div>
