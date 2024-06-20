@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import EditProductModal from "../../components/EditProductModal/EditProductModal";
@@ -121,7 +121,6 @@ const ProductManagement = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Logic for displaying products
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(
@@ -138,11 +137,22 @@ const ProductManagement = () => {
       <button
         key={number}
         onClick={() => handlePageChange(number)}
-        className={`px-4 py-2 ${currentPage === number ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} rounded`}
+        className={`px-4 py-2 text-sm ${currentPage === number ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} rounded`}
       >
         {number}
       </button>
     ));
+  };
+
+  const getCategoryColor = (categoryName) => {
+    const colors = {
+      Electronics: "bg-blue-200",
+      Accessories: "bg-green-200",
+      Clothing: "bg-red-200",
+      Furniture: "bg-yellow-200",
+      string: "bg-purple-200",
+    };
+    return colors[categoryName] || "bg-gray-200";
   };
 
   return (
@@ -196,7 +206,7 @@ const ProductManagement = () => {
                     No products found. Add a product.
                   </h4>
                   <button
-                    className="px-4 py-2 mt-4 text-white bg-blue-500 rounded"
+                    className="px-4 py-2 mt-4 text-sm text-white bg-blue-500 rounded"
                     onClick={handleOpenAddModal}
                   >
                     Add Product
@@ -229,31 +239,36 @@ const ProductManagement = () => {
                         <h5 className="text-sm font-medium">Stock</h5>
                         <h4 className="text-sm font-semibold">{product.qty}</h4>
                       </div>
-                      <p className="inline-block px-4 text-sm text-black bg-slate-300 rounded-xl">
+                      <p className="inline-block mt-2 text-sm text-black rounded-xl">
                         <i>
-                          {product.categories
-                            .map((category) => category.name)
-                            .join(", ")}
+                          {product.categories.map((category) => (
+                            <span
+                              key={category.id}
+                              className={`px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                            >
+                              <i>{category.name}</i>
+                            </span>
+                          ))}
                         </i>
                       </p>
                       <div className="flex gap-1 mt-4">
                         <button
-                          className="px-3 py-2 text-white bg-gray-500 rounded"
+                          className="px-3 text-white bg-gray-500 rounded"
                           onClick={() => handleOpenDetailModal(product)}
                         >
-                          <FaEye className="w-4 h-4" />
+                          <FaEye className="w-3 h-3" />
                         </button>
                         <button
-                          className="px-4 py-2 text-white bg-blue-500 rounded"
+                          className="px-4 text-white bg-blue-500 rounded"
                           onClick={() => handleOpenEditModal(product)}
                         >
-                          Edit
+                          <FaRegEdit className="w-3 h-3" />
                         </button>
                         <button
                           className="px-4 py-2 text-white bg-red-500 rounded"
                           onClick={() => handleOpenDeleteModal(product)}
                         >
-                          Delete
+                          <FaTrashAlt className="w-3 h-3" />
                         </button>
                       </div>
                     </div>
@@ -263,7 +278,7 @@ const ProductManagement = () => {
               {products.length > 0 && (
                 <div className="flex items-center justify-between mt-4">
                   <button
-                    className="px-4 py-2 text-white bg-blue-500 rounded"
+                    className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
                     onClick={handleOpenAddModal}
                   >
                     Add Product
