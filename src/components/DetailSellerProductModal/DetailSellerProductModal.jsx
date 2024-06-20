@@ -16,7 +16,11 @@ const DetailSellerProductModal = ({ show, onClose, product }) => {
           <div className="flex">
             <div className="w-1/2 p-4">
               <img
-                src="https://via.placeholder.com/150"
+                src={
+                  product.images.length > 0
+                    ? product.images[0].url
+                    : "https://via.placeholder.com/150"
+                }
                 alt="Product Image"
                 className="object-cover w-full h-auto rounded-lg"
               />
@@ -80,6 +84,11 @@ DetailSellerProductModal.propTypes = {
     qty: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     image: PropTypes.string,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     categories: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
