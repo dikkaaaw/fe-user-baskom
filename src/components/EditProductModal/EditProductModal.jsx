@@ -180,17 +180,17 @@ const EditProductModal = ({ show, onClose, product }) => {
               ))}
             </div>
           </div>
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-2 mt-6">
             <button
               type="button"
-              className="px-4 py-2 text-white bg-gray-500 rounded"
+              className="px-4 py-2 text-sm text-white bg-gray-500 rounded"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-blue-500 rounded"
+              className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
             >
               Update Product
             </button>
