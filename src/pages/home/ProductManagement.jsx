@@ -244,7 +244,11 @@ const ProductManagement = () => {
                       className="p-4 bg-white rounded-lg shadow-lg w-60"
                     >
                       <img
-                        src="https://via.placeholder.com/150"
+                        src={
+                          product.images.length > 0
+                            ? product.images[0].url
+                            : "https://via.placeholder.com/150"
+                        }
                         alt="Product Image"
                         className="object-cover w-full h-32 mb-4"
                       />
