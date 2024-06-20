@@ -22,7 +22,10 @@ const DetailSellerProductModal = ({ show, onClose, product }) => {
               />
             </div>
             <div className="w-1/2 p-4">
-              <h2 className="mb-4 text-2xl font-bold">{product.name}</h2>
+              <h2 className="mb-4 text-2xl font-bold underline">
+                {product.name}
+              </h2>
+
               <div className="flex justify-between">
                 <p className="mb-2">
                   <strong>Price</strong>
