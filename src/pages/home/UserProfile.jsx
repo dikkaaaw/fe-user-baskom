@@ -114,8 +114,8 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
+      <ToastContainer />
       <div className="p-6 mx-auto bg-white rounded-lg shadow-lg max-w-7xl">
-        <ToastContainer />
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-semibold">User Profile</h1>
           <button
