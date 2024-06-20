@@ -64,12 +64,19 @@ const Products = ({ result }) => {
                 <div className="flex flex-col">
                   <p className="mt-2">Kategori</p>
                   <div className="mt-1 rounded-xl">
-                    {product.categories.map((category) => (
+                    {product.categories.map((category, index) => (
                       <span
                         key={category.id}
-                        className={`px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                        className={`inline-block px-6 py-1 rounded-xl ${getCategoryColor(category.name)}`}
+                        style={{
+                          whiteSpace: "nowrap",
+                          marginBottom: "2px",
+                        }}
                       >
                         <i>{category.name}</i>
+                        {index !== product.categories.length - 1 && (
+                          <div style={{ height: "1px" }} />
+                        )}
                       </span>
                     ))}
                   </div>
@@ -80,7 +87,7 @@ const Products = ({ result }) => {
         </section>
       ) : (
         <div className="product-not-found">
-          <i>Product not found..</i>
+          <i>No Product..</i>
         </div>
       )}
       <DetailProductModal
