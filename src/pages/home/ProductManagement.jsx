@@ -21,6 +21,12 @@ const ProductManagement = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
@@ -42,6 +48,60 @@ const ProductManagement = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDeleteProduct = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete(`${API_URL}/products/${selectedProduct.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProducts(
+        products.filter((product) => product.id !== selectedProduct.id)
+      );
+      toast.success("Successfully delete product!", {
+        closeOnClick: true,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        setShowDeleteModal(false);
+        window.location.reload();
+      }, 1200);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers.map((number) => (
+      <button
+        key={number}
+        onClick={() => handlePageChange(number)}
+        className={`px-4 py-2 text-sm ${currentPage === number ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} rounded`}
+      >
+        {number}
+      </button>
+    ));
+  };
+
+  const getCategoryColor = (categoryName) => {
+    const colors = {
+      Electronics: "bg-blue-200",
+      Accessories: "bg-green-200",
+      Clothing: "bg-red-200",
+      Furniture: "bg-yellow-200",
+      string: "bg-purple-200",
+    };
+    return colors[categoryName] || "bg-gray-200";
   };
 
   const handleOpenAddModal = () => {
@@ -80,33 +140,6 @@ const ProductManagement = () => {
     setShowLogoutModal(false);
   };
 
-  const handleDeleteProduct = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      await axios.delete(`${API_URL}/products/${selectedProduct.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setProducts(
-        products.filter((product) => product.id !== selectedProduct.id)
-      );
-      toast.success("Successfully delete product!", {
-        closeOnClick: true,
-        hideProgressBar: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-      });
-      setTimeout(() => {
-        setShowDeleteModal(false);
-        window.location.reload();
-      }, 1200);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleOpenDeleteModal = (product) => {
     setSelectedProduct(product);
     setShowDeleteModal(true);
@@ -119,40 +152,6 @@ const ProductManagement = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers.map((number) => (
-      <button
-        key={number}
-        onClick={() => handlePageChange(number)}
-        className={`px-4 py-2 text-sm ${currentPage === number ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} rounded`}
-      >
-        {number}
-      </button>
-    ));
-  };
-
-  const getCategoryColor = (categoryName) => {
-    const colors = {
-      Electronics: "bg-blue-200",
-      Accessories: "bg-green-200",
-      Clothing: "bg-red-200",
-      Furniture: "bg-yellow-200",
-      string: "bg-purple-200",
-    };
-    return colors[categoryName] || "bg-gray-200";
   };
 
   return (
