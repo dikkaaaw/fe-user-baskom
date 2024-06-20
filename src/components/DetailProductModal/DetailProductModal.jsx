@@ -13,6 +13,18 @@ const DetailProductModal = ({ show, onClose, productId }) => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
+    if (show) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [show]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
@@ -61,7 +73,7 @@ const DetailProductModal = ({ show, onClose, productId }) => {
                 <span>
                   <FaLocationDot />
                 </span>
-                Yogyakarta
+                {product.user.address}
               </button>
             </div>
             <div className="ml-6 product-info">
