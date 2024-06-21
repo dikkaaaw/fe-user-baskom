@@ -14,11 +14,11 @@
   cursor: pointer;
 }
 
-.card-img {
+/* .card-img {
   width: 13rem;
   margin-bottom: 1rem;
-  object-fit: cover;
-}
+  object-fit: fill;
+} */
 
 .card-title {
   margin-bottom: 1rem;

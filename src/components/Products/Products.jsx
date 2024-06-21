@@ -45,7 +45,7 @@ const Products = ({ result }) => {
                     : "https://via.placeholder.com/150"
                 }
                 alt={product.name}
-                className="card-img"
+                className="object-cover w-full h-32 mb-4"
               />
               <div className="card-details">
                 <h3 className="card-title">
