@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { CircularProgress } from "@mui/material";
 import Navigation from "../../components/Navigation/Nav";
 import Products from "../../components/Products/Products";
-import Recommended from "../../components/Recommended/Recommended";
+// import Recommended from "../../components/Recommended/Recommended";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import "../../index.css";
@@ -99,7 +99,7 @@ function Dashboard() {
         categories={categories}
       />
       <Navigation handleInputChange={handleInputChange} query={searchQuery} />
-      <Recommended />
+      {/* <Recommended /> */}
       {isLoading ? (
         <CircularProgress />
       ) : (
