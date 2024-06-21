@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 
 const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
@@ -12,10 +12,12 @@ const AddProductModal = ({ show, onClose }) => {
   const [price, setPrice] = useState("");
   const [qty, setQty] = useState("");
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  const [errors, setErrors] = useState({});
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [image, setImage] = useState(null);
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (show) {
@@ -97,11 +99,30 @@ const AddProductModal = ({ show, onClose }) => {
     };
 
     try {
-      await axios.post(`${API_URL}/products`, productData, {
+      const response = await axios.post(`${API_URL}/products`, productData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (image) {
+        const productId = response.data.id;
+        const formData = new FormData();
+        formData.append("productId", productId);
+        formData.append("files", image);
+
+        await axios.post(
+          `${API_URL}/product-images?productId=${productId}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
+
       toast.success("Product added successfully!", {
         closeOnClick: true,
         hideProgressBar: true,
@@ -236,6 +257,16 @@ const AddProductModal = ({ show, onClose }) => {
             {errors.categories && (
               <p className="text-sm text-red-500">{errors.categories}</p>
             )}
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-semibold">Image</label>
+            <input
+              type="file"
+              name="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              required
+            />
           </div>
           <div className="flex justify-center gap-2 mt-6">
             <button
