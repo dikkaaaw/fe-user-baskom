@@ -6,17 +6,6 @@ import "./Product.css";
 const Products = ({ result }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = result.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(result.length / productsPerPage); i++) {
-    pageNumbers.push(i);
-  }
 
   const handleModal = (productId) => {
     setSelectedProductId(productId);
@@ -41,9 +30,9 @@ const Products = ({ result }) => {
 
   return (
     <>
-      {currentProducts.length > 0 ? (
+      {result.length > 0 ? (
         <section className="card-container">
-          {currentProducts.map((product) => (
+          {result.map((product) => (
             <div
               key={product.id}
               className="card"
@@ -105,17 +94,6 @@ const Products = ({ result }) => {
           <i>No Product..</i>
         </div>
       )}
-      <div className="pagination">
-        {pageNumbers.map((number) => (
-          <button
-            key={number}
-            onClick={() => setCurrentPage(number)}
-            className={currentPage === number ? "active" : ""}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
       <DetailProductModal
         show={showDetailModal}
         onClose={handleCloseModal}
