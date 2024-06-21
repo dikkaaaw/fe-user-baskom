@@ -132,7 +132,7 @@ const AddProductModal = ({ show, onClose }) => {
       });
       setTimeout(() => {
         window.location.reload();
-      }, 1200);
+      }, 1000);
     } catch (error) {
       toast.error("Failed to add product!");
       console.error(error);
