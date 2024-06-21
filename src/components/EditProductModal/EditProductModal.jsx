@@ -17,7 +17,6 @@ const EditProductModal = ({ show, onClose, product }) => {
 
   useEffect(() => {
     if (show && product) {
-      console.log("Setting form data with product:", product);
       setFormData({
         name: product.name,
         description: product.description,
@@ -53,8 +52,6 @@ const EditProductModal = ({ show, onClose, product }) => {
       toast.error("Please fill in all fields.");
       return;
     }
-
-    console.log("Submitting form data:", formData);
 
     const token = localStorage.getItem("token");
 
