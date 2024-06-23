@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import UpgradeAccountModal from "../../components/UpgradeAccountModal/UpgradeAccountModal";
-import LogoutModal from "../../components/LogoutModal/LogoutModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UpgradeAccountModal from "../../components/UpgradeAccountModal/UpgradeAccountModal";
+import LogoutModal from "../../components/LogoutModal/LogoutModal";
 
 const API_URL = "https://baskom-api.up.railway.app/api/v1";
 
@@ -71,6 +71,7 @@ const UserProfile = () => {
       );
       setUser(response.data);
       toast.success("Success update profile!", {
+        autoClose: 2000,
         closeOnClick: true,
         hideProgressBar: true,
         pauseOnHover: false,
