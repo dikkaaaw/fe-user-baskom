@@ -32,7 +32,18 @@ const UpgradeAccountModal = ({ isOpen, closeModal }) => {
 
   const handleChange = (e) => {
     const file = e.target.files[0];
-    setFormData(file);
+    if (file) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        if (img.width > 400 || img.height > 400) {
+          setError("Image dimensions should not exceed 400x400 pixels.");
+        } else {
+          setFormData(file);
+          setError("");
+        }
+      };
+    }
   };
 
   const handleSubmit = async (e) => {
