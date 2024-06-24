@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import {
-  FaRegEye,
-  FaEyeSlash,
-  FaEnvelope,
-  FaLock,
-  FaGoogle,
-} from "react-icons/fa";
+import { FaRegEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -425,7 +419,7 @@ const Login = () => {
                   >
                     Login
                   </button>
-                  <div className="flex justify-center mt-4 mb-4">
+                  {/* <div className="flex justify-center mt-4 mb-4">
                     <p>─────</p>
                     <p className="me-2 ms-2 font-poppins">Or</p>
                     <p>─────</p>
@@ -437,7 +431,7 @@ const Login = () => {
                     >
                       <FaGoogle className="mr-4" /> Sign in with Google
                     </button>
-                  </Link>
+                  </Link> */}
                 </div>
               </form>
               <div className="mt-4 text-sm text-center text-gray-600 font-poppins">
